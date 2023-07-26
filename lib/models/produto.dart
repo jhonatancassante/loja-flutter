@@ -14,4 +14,8 @@ class Produto {
     required this.imagemUrl,
     this.eFavorito = false,
   });
+
+  void alternarFavorito() {
+    eFavorito = !eFavorito;
+  }
 }
