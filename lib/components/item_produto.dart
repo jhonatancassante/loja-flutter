@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/rotas.dart';
 import '../models/produto.dart';
 
 class ItemProduto extends StatelessWidget {
@@ -28,9 +29,15 @@ class ItemProduto extends StatelessWidget {
             color: Theme.of(context).colorScheme.secondary,
           ),
         ),
-        child: Image.network(
-          produto.imagemUrl,
-          fit: BoxFit.cover,
+        child: GestureDetector(
+          onTap: () => Navigator.of(context).pushNamed(
+            Rotas.detalheProduto,
+            arguments: produto,
+          ),
+          child: Image.network(
+            produto.imagemUrl,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );

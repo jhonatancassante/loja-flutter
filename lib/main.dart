@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:loja_flutter/screens/tela_grid_produtos.dart';
+import 'package:loja_flutter/screens/tela_detalhe_produto.dart';
+import 'screens/tela_grid_produtos.dart';
+import 'utils/rotas.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,14 +28,13 @@ class MyApp extends StatelessWidget {
         appBarTheme: tema.appBarTheme.copyWith(
           backgroundColor: Colors.deepPurpleAccent[400],
           foregroundColor: Colors.white,
-          titleTextStyle: const TextStyle(
-            fontFamily: 'Anton',
-            fontSize: 24,
-          ),
         ),
       ),
       home: TelaGridProdutos(),
       debugShowCheckedModeBanner: false,
+      routes: {
+        Rotas.detalheProduto: (ctx) => const TelaDetalheProduto(),
+      },
     );
   }
 }
