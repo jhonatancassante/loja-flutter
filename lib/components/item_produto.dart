@@ -16,6 +16,7 @@ class ItemProduto extends StatelessWidget {
           leading: IconButton(
             onPressed: () {},
             icon: const Icon(Icons.favorite),
+            color: Theme.of(context).colorScheme.secondary,
           ),
           title: Text(
             produto.nome,
@@ -24,6 +25,7 @@ class ItemProduto extends StatelessWidget {
           trailing: IconButton(
             onPressed: () {},
             icon: const Icon(Icons.shopping_cart),
+            color: Theme.of(context).colorScheme.secondary,
           ),
         ),
         child: Image.network(
