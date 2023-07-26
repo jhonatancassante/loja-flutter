@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../components/item_produto.dart';
 import '../data/dados_ficticios.dart';
 import '../models/produto.dart';
 
@@ -13,18 +14,16 @@ class TelaGridProdutos extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Minha Loja'),
       ),
-      body: Padding(
+      body: GridView.builder(
         padding: const EdgeInsets.all(10),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 3 / 2,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-          ),
-          itemBuilder: (ctx, i) => Text(produtosCarregados[i].nome),
-          itemCount: produtosCarregados.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 3 / 2,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
         ),
+        itemBuilder: (ctx, i) => ItemProduto(produto: produtosCarregados[i]),
+        itemCount: produtosCarregados.length,
       ),
     );
   }
