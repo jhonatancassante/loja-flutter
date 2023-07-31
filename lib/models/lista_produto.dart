@@ -7,6 +7,12 @@ class ListaProduto with ChangeNotifier {
 
   List<Produto> get itens => [..._itens];
 
+  List<Produto> get itensFavorito => _itens
+      .where(
+        (element) => element.eFavorito,
+      )
+      .toList();
+
   void adicionarProduto(Produto produto) {
     _itens.add(produto);
 
