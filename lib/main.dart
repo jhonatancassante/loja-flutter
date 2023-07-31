@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:loja_flutter/screens/tela_detalhe_produto.dart';
+import 'package:provider/provider.dart';
+import 'models/lista_produto.dart';
+import 'screens/tela_detalhe_produto.dart';
 import 'screens/tela_grid_produtos.dart';
 import 'utils/rotas.dart';
 
@@ -18,23 +20,26 @@ class MyApp extends StatelessWidget {
       useMaterial3: true,
     );
 
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: tema.copyWith(
-        colorScheme: tema.colorScheme.copyWith(
-          primary: Colors.deepPurpleAccent[400],
-          secondary: Colors.lightGreenAccent[400],
+    return ChangeNotifierProvider(
+      create: (_) => ListaProduto(),
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: tema.copyWith(
+          colorScheme: tema.colorScheme.copyWith(
+            primary: Colors.deepPurpleAccent[400],
+            secondary: Colors.lightGreenAccent[400],
+          ),
+          appBarTheme: tema.appBarTheme.copyWith(
+            backgroundColor: Colors.deepPurpleAccent[400],
+            foregroundColor: Colors.white,
+          ),
         ),
-        appBarTheme: tema.appBarTheme.copyWith(
-          backgroundColor: Colors.deepPurpleAccent[400],
-          foregroundColor: Colors.white,
-        ),
+        home: TelaGridProdutos(),
+        debugShowCheckedModeBanner: false,
+        routes: {
+          Rotas.detalheProduto: (ctx) => const TelaDetalheProduto(),
+        },
       ),
-      home: TelaGridProdutos(),
-      debugShowCheckedModeBanner: false,
-      routes: {
-        Rotas.detalheProduto: (ctx) => const TelaDetalheProduto(),
-      },
     );
   }
 }

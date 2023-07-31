@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/lista_produto.dart';
 import '../components/item_produto.dart';
-import '../data/dados_ficticios.dart';
 import '../models/produto.dart';
 
 class TelaGridProdutos extends StatelessWidget {
   TelaGridProdutos({super.key});
 
-  final List<Produto> produtosCarregados = produtosFicticios;
-
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ListaProduto>(context);
+    final List<Produto> produtosCarregados = provider.itens;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Minha Loja'),
