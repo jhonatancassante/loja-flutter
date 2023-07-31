@@ -21,7 +21,10 @@ class GridProduto extends StatelessWidget {
         mainAxisSpacing: 10,
         crossAxisSpacing: 10,
       ),
-      itemBuilder: (ctx, i) => ItemProduto(produto: produtosCarregados[i]),
+      itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
+        value: produtosCarregados[i],
+        child: const ItemProduto(),
+      ),
       itemCount: produtosCarregados.length,
     );
   }

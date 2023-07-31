@@ -1,4 +1,6 @@
-class Produto {
+import 'package:flutter/material.dart';
+
+class Produto with ChangeNotifier {
   final String id;
   final String nome;
   final String descricao;
@@ -17,5 +19,7 @@ class Produto {
 
   void alternarFavorito() {
     eFavorito = !eFavorito;
+
+    notifyListeners();
   }
 }

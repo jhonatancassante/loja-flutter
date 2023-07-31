@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../utils/rotas.dart';
 import '../models/produto.dart';
 
 class ItemProduto extends StatelessWidget {
-  const ItemProduto({required this.produto, super.key});
-
-  final Produto produto;
+  const ItemProduto({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final produto = Provider.of<Produto>(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
         footer: GridTileBar(
           backgroundColor: Colors.black87,
           leading: IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.favorite),
+            onPressed: produto.alternarFavorito,
+            icon: produto.eFavorito
+                ? const Icon(Icons.favorite)
+                : const Icon(Icons.favorite_border),
             color: Theme.of(context).colorScheme.secondary,
           ),
           title: Text(
