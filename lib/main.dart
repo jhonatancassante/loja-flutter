@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
           colorScheme: tema.colorScheme.copyWith(
             primary: Colors.deepPurpleAccent[400],
             secondary: Colors.lightGreenAccent[400],
+            tertiary: Colors.deepOrange,
           ),
           appBarTheme: tema.appBarTheme.copyWith(
             backgroundColor: Colors.deepPurpleAccent[400],
