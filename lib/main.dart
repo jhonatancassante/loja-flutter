@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja_flutter/models/carrinho.dart';
 import 'package:provider/provider.dart';
 import 'models/lista_produto.dart';
 import 'screens/tela_detalhe_produto.dart';
@@ -20,8 +21,15 @@ class MyApp extends StatelessWidget {
       useMaterial3: true,
     );
 
-    return ChangeNotifierProvider(
-      create: (_) => ListaProduto(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => ListaProduto(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => Carrinho(),
+        ),
+      ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: tema.copyWith(
@@ -34,7 +42,7 @@ class MyApp extends StatelessWidget {
             foregroundColor: Colors.white,
           ),
         ),
-        home: TelaGridProdutos(),
+        home: const TelaGridProdutos(),
         debugShowCheckedModeBanner: false,
         routes: {
           Rotas.detalheProduto: (ctx) => const TelaDetalheProduto(),
