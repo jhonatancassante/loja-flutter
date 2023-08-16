@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:loja_flutter/models/carrinho.dart';
+import 'package:provider/provider.dart';
 
 import '../components/grid_produto.dart';
+import '../components/medalha.dart';
 
 enum OpcoesFiltro {
   favoritos,
@@ -44,6 +47,16 @@ class _TelaGridProdutosState extends State<TelaGridProdutos> {
                 }
               });
             },
+          ),
+          Consumer<Carrinho>(
+            builder: (ctx, carrinho, child) => Medalha(
+              valor: carrinho.contadorItens.toString(),
+              child: child!,
+            ),
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.shopping_cart),
+            ),
           ),
         ],
       ),
