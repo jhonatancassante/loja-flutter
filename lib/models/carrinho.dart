@@ -11,7 +11,13 @@ class Carrinho with ChangeNotifier {
     return {..._itens};
   }
 
-  int get contadorItens => _itens.length;
+  int get contadorItens {
+    int contador = 0;
+    _itens.forEach((key, value) {
+      contador += value.quantidade;
+    });
+    return contador;
+  }
 
   double get total {
     double total = 0.0;
