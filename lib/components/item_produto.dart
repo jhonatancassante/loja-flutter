@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../utils/rotas.dart';
 import '../models/produto.dart';
+import '../models/carrinho.dart';
 
 class ItemProduto extends StatelessWidget {
   const ItemProduto({super.key});
@@ -9,6 +10,10 @@ class ItemProduto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final produto = Provider.of<Produto>(
+      context,
+      listen: false,
+    );
+    final carrinho = Provider.of<Carrinho>(
       context,
       listen: false,
     );
@@ -32,7 +37,9 @@ class ItemProduto extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           trailing: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              carrinho.adicionarItem(produto);
+            },
             icon: const Icon(Icons.shopping_cart),
             color: Theme.of(context).colorScheme.secondary,
           ),
