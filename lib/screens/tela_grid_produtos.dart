@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loja_flutter/models/carrinho.dart';
+import 'package:loja_flutter/utils/rotas.dart';
 import 'package:provider/provider.dart';
 
 import '../components/grid_produto.dart';
@@ -54,7 +55,9 @@ class _TelaGridProdutosState extends State<TelaGridProdutos> {
               child: child!,
             ),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(Rotas.carrinho);
+              },
               icon: const Icon(Icons.shopping_cart),
             ),
           ),
