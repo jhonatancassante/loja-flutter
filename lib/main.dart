@@ -43,6 +43,11 @@ class MyApp extends StatelessWidget {
             backgroundColor: Colors.deepPurpleAccent[400],
             foregroundColor: Colors.white,
           ),
+          textTheme: tema.textTheme.copyWith(
+            titleLarge: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
         ),
         home: const TelaGridProdutos(),
         debugShowCheckedModeBanner: false,
