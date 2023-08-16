@@ -26,7 +26,9 @@ class GridProduto extends StatelessWidget {
       ),
       itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
         value: produtosCarregados[i],
-        child: const ItemProduto(),
+        //Const precisa ser removido para corrigir erro no filtro
+        // ignore: prefer_const_constructors
+        child: ItemProduto(),
       ),
       itemCount: produtosCarregados.length,
     );
