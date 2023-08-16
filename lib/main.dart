@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loja_flutter/models/carrinho.dart';
+import 'package:loja_flutter/screens/tela_carrinho.dart';
 import 'package:provider/provider.dart';
 import 'models/lista_produto.dart';
 import 'screens/tela_detalhe_produto.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         routes: {
           Rotas.detalheProduto: (ctx) => const TelaDetalheProduto(),
+          Rotas.carrinho: (ctx) => const TelaCarrinho(),
         },
       ),
     );
