@@ -51,7 +51,7 @@ class _TelaGridProdutosState extends State<TelaGridProdutos> {
           ),
           Consumer<Carrinho>(
             builder: (ctx, carrinho, child) => Medalha(
-              valor: carrinho.contadorItens.toString(),
+              valor: carrinho.contadorItensTotal.toString(),
               child: child!,
             ),
             child: IconButton(
