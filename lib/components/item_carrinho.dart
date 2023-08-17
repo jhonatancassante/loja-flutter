@@ -8,6 +8,33 @@ class ItemCarrinhoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(itemCarrinho.nomeProduto);
+    return Card(
+      margin: const EdgeInsets.symmetric(
+        horizontal: 15,
+        vertical: 4,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(5),
+              child: FittedBox(
+                child: Text(
+                  '${itemCarrinho.preco}',
+                ),
+              ),
+            ),
+          ),
+          title: Text(itemCarrinho.nomeProduto),
+          subtitle: Text(
+            'Total: R\$ ${itemCarrinho.preco * itemCarrinho.quantidade}',
+          ),
+          trailing: Text("${itemCarrinho.quantidade}x"),
+        ),
+      ),
+    );
   }
 }
