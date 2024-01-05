@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loja_flutter/models/carrinho.dart';
 import 'package:loja_flutter/models/item_carrinho.dart';
+import 'package:loja_flutter/utils/formatar.dart';
 import 'package:provider/provider.dart';
 
 class ItemCarrinhoWidget extends StatelessWidget {
@@ -46,14 +47,18 @@ class ItemCarrinhoWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(5),
                 child: FittedBox(
                   child: Text(
-                    '${itemCarrinho.preco}',
+                    '${Formatar.moedaCompacta(
+                      itemCarrinho.preco,
+                    )}',
                   ),
                 ),
               ),
             ),
             title: Text(itemCarrinho.nomeProduto),
             subtitle: Text(
-              'Total: R\$ ${itemCarrinho.preco * itemCarrinho.quantidade}',
+              'Total: R\$ ${Formatar.moeda(
+                itemCarrinho.preco * itemCarrinho.quantidade,
+              )}',
             ),
             trailing: Text("${itemCarrinho.quantidade}x"),
           ),

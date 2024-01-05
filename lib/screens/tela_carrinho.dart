@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loja_flutter/components/item_carrinho.dart';
 import 'package:loja_flutter/models/carrinho.dart';
+import 'package:loja_flutter/utils/formatar.dart';
 import 'package:provider/provider.dart';
 
 class TelaCarrinho extends StatelessWidget {
@@ -39,7 +40,9 @@ class TelaCarrinho extends StatelessWidget {
                   Chip(
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     label: Text(
-                      'R\$ ${carrinho.total.toStringAsFixed(2)}',
+                      'R\$ ${Formatar.moeda(
+                        carrinho.total,
+                      )}',
                       style: TextStyle(
                         color: Theme.of(context).textTheme.titleLarge?.color,
                       ),
