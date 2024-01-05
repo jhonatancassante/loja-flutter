@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loja_flutter/models/carrinho.dart';
 import 'package:loja_flutter/models/lista_pedido.dart';
 import 'package:loja_flutter/screens/tela_carrinho.dart';
+import 'package:loja_flutter/screens/tela_pedidos.dart';
 import 'package:provider/provider.dart';
 import 'models/lista_produto.dart';
 import 'screens/tela_detalhe_produto.dart';
@@ -53,11 +54,12 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: const TelaGridProdutos(),
         debugShowCheckedModeBanner: false,
         routes: {
+          Rotas.home: (ctx) => const TelaGridProdutos(),
           Rotas.detalheProduto: (ctx) => const TelaDetalheProduto(),
           Rotas.carrinho: (ctx) => const TelaCarrinho(),
+          Rotas.pedidos: (ctx) => const TelaPedidos(),
         },
       ),
     );
