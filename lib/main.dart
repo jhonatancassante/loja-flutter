@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loja_flutter/models/carrinho.dart';
+import 'package:loja_flutter/models/lista_pedido.dart';
 import 'package:loja_flutter/screens/tela_carrinho.dart';
 import 'package:provider/provider.dart';
 import 'models/lista_produto.dart';
@@ -29,6 +30,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => Carrinho(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ListaPedido(),
         ),
       ],
       child: MaterialApp(
