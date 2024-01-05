@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja_flutter/components/app_drawer.dart';
 import 'package:loja_flutter/models/carrinho.dart';
 import 'package:loja_flutter/utils/rotas.dart';
 import 'package:provider/provider.dart';
@@ -64,6 +65,7 @@ class _TelaGridProdutosState extends State<TelaGridProdutos> {
         ],
       ),
       body: GridProduto(_filtrarFavoritos),
+      drawer: const AppDrawer(),
     );
   }
 }
