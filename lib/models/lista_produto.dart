@@ -18,4 +18,8 @@ class ListaProduto with ChangeNotifier {
 
     notifyListeners();
   }
+
+  int get contagemItens {
+    return _itens.length;
+  }
 }
