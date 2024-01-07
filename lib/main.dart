@@ -3,6 +3,7 @@ import 'package:loja_flutter/models/carrinho.dart';
 import 'package:loja_flutter/models/lista_pedido.dart';
 import 'package:loja_flutter/screens/tela_carrinho.dart';
 import 'package:loja_flutter/screens/tela_pedidos.dart';
+import 'package:loja_flutter/screens/tela_produtos.dart';
 import 'package:provider/provider.dart';
 import 'models/lista_produto.dart';
 import 'screens/tela_detalhe_produto.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
           Rotas.detalheProduto: (ctx) => const TelaDetalheProduto(),
           Rotas.carrinho: (ctx) => const TelaCarrinho(),
           Rotas.pedidos: (ctx) => const TelaPedidos(),
+          Rotas.produtos: (ctx) => const TelaProdutos(),
         },
       ),
     );
