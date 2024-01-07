@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../models/lista_produto.dart';
 import '../models/produto.dart';
-import 'item_produto.dart';
+import 'grid_item_produto.dart';
 
 class GridProduto extends StatelessWidget {
   const GridProduto(this._filtrarFavoritos, {super.key});
@@ -28,7 +28,7 @@ class GridProduto extends StatelessWidget {
         value: produtosCarregados[i],
         //Const precisa ser removido para corrigir erro no filtro
         // ignore: prefer_const_constructors
-        child: ItemProduto(),
+        child: GridItemProduto(),
       ),
       itemCount: produtosCarregados.length,
     );
