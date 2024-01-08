@@ -4,4 +4,5 @@ class Rotas {
   static const carrinho = '/carrinho';
   static const pedidos = '/pedidos';
   static const produtos = '/produtos';
+  static const formularioProduto = '/produto-formulario';
 }
