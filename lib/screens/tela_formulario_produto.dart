@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:loja_flutter/models/produto.dart';
 
 class TelaFormularioProduto extends StatefulWidget {
   const TelaFormularioProduto({super.key});
@@ -12,6 +15,8 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
   final _focoDescricao = FocusNode();
   final _focoUrlImagem = FocusNode();
   final _controladorImagemUrl = TextEditingController();
+  final _keyFormulario = GlobalKey<FormState>();
+  final _dadosFormulario = <String, Object>{};
 
   @override
   void initState() {
@@ -32,15 +37,33 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
     setState(() {});
   }
 
+  void _enviarFormulario() {
+    _keyFormulario.currentState?.save();
+    final produtoNovo = Produto(
+      id: Random().nextDouble().toString(),
+      nome: _dadosFormulario['nome'] as String,
+      descricao: _dadosFormulario['descricao'] as String,
+      preco: _dadosFormulario['preco'] as double,
+      imagemUrl: _dadosFormulario['imagemUrl'] as String,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Formulário de Produto'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.save),
+            onPressed: _enviarFormulario,
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Form(
+          key: _keyFormulario,
           child: ListView(
             children: [
               TextFormField(
@@ -51,6 +74,7 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_focoPreco);
                 },
+                onSaved: (nome) => _dadosFormulario['nome'] = nome ?? '',
               ),
               TextFormField(
                 decoration: const InputDecoration(
@@ -64,6 +88,8 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
+                onSaved: (preco) =>
+                    _dadosFormulario['preco'] = double.parse(preco ?? '0'),
               ),
               TextFormField(
                 decoration: const InputDecoration(
@@ -72,6 +98,8 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
                 focusNode: _focoDescricao,
                 keyboardType: TextInputType.multiline,
                 maxLines: 3,
+                onSaved: (descricao) =>
+                    _dadosFormulario['descricao'] = descricao ?? '',
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -85,6 +113,9 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
                       keyboardType: TextInputType.url,
                       textInputAction: TextInputAction.done,
                       controller: _controladorImagemUrl,
+                      onFieldSubmitted: (_) => _enviarFormulario(),
+                      onSaved: (imagemUrl) =>
+                          _dadosFormulario['imagemUrl'] = imagemUrl ?? '',
                     ),
                   ),
                   Container(
