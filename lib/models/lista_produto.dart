@@ -1,11 +1,15 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import '../data/dados_ficticios.dart';
 import '../models/produto.dart';
 
 class ListaProduto with ChangeNotifier {
   final List<Produto> _itens = produtosFicticios;
+  // final _urlBase = 'https://aulas-fluter1-default-rtdb.firebaseio.com/';
+  final _urlBase = 'https://aulas-flutter-shop-default-rtdb.firebaseio.com';
 
   List<Produto> get itens => [..._itens];
 
@@ -36,6 +40,19 @@ class ListaProduto with ChangeNotifier {
   }
 
   void adicionarProduto(Produto produto) {
+    http.post(
+      Uri.parse('$_urlBase/produtosTeste.json'),
+      body: jsonEncode(
+        {
+          "nome": produto.nome,
+          "descricao": produto.descricao,
+          "preco": produto.preco,
+          "imagemUrl": produto.imagemUrl,
+          "eFavorito": produto.eFavorito,
+        },
+      ),
+    );
+
     _itens.add(produto);
   }
 
