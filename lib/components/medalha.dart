@@ -19,8 +19,8 @@ class Medalha extends StatelessWidget {
       children: [
         child,
         Positioned(
-          right: 8,
-          top: 8,
+          right: 4,
+          top: 4,
           child: Container(
             padding: const EdgeInsets.all(2),
             decoration: BoxDecoration(
