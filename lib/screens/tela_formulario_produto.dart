@@ -1,7 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:loja_flutter/models/lista_produto.dart';
 import 'package:loja_flutter/models/produto.dart';
+import 'package:loja_flutter/utils/validador.dart';
+import 'package:provider/provider.dart';
 
 class TelaFormularioProduto extends StatefulWidget {
   const TelaFormularioProduto({super.key});
@@ -25,6 +26,27 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_dadosFormulario.isEmpty) {
+      final arg = ModalRoute.of(context)?.settings.arguments;
+
+      if (arg != null) {
+        final produto = arg as Produto;
+
+        _dadosFormulario['id'] = produto.id;
+        _dadosFormulario['nome'] = produto.nome;
+        _dadosFormulario['preco'] = produto.preco;
+        _dadosFormulario['descricao'] = produto.descricao;
+        _dadosFormulario['imagemUrl'] = produto.imagemUrl;
+
+        _controladorImagemUrl.text = produto.imagemUrl;
+      }
+    }
+  }
+
+  @override
   void dispose() {
     super.dispose();
     _focoPreco.dispose();
@@ -34,18 +56,21 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
   }
 
   void atualizarImagem() {
-    setState(() {});
+    Validador.campoUrlImagem(_controladorImagemUrl.text) ?? setState(() {});
   }
 
   void _enviarFormulario() {
+    final eValido = _keyFormulario.currentState?.validate() ?? false;
+
+    if (!eValido) return;
+
     _keyFormulario.currentState?.save();
-    final produtoNovo = Produto(
-      id: Random().nextDouble().toString(),
-      nome: _dadosFormulario['nome'] as String,
-      descricao: _dadosFormulario['descricao'] as String,
-      preco: _dadosFormulario['preco'] as double,
-      imagemUrl: _dadosFormulario['imagemUrl'] as String,
-    );
+
+    Provider.of<ListaProduto>(
+      context,
+      listen: false,
+    ).salvarProduto(_dadosFormulario);
+    Navigator.of(context).pop();
   }
 
   @override
@@ -67,6 +92,7 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
           child: ListView(
             children: [
               TextFormField(
+                initialValue: _dadosFormulario['nome']?.toString(),
                 decoration: const InputDecoration(
                   labelText: 'Nome',
                 ),
@@ -75,8 +101,10 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
                   FocusScope.of(context).requestFocus(_focoPreco);
                 },
                 onSaved: (nome) => _dadosFormulario['nome'] = nome ?? '',
+                validator: (nome) => Validador.campoString(nome, 3),
               ),
               TextFormField(
+                initialValue: _dadosFormulario['preco']?.toString(),
                 decoration: const InputDecoration(
                   labelText: 'Preço',
                 ),
@@ -90,8 +118,10 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
                 ),
                 onSaved: (preco) =>
                     _dadosFormulario['preco'] = double.parse(preco ?? '0'),
+                validator: (preco) => Validador.campoNumerico(preco),
               ),
               TextFormField(
+                initialValue: _dadosFormulario['descricao']?.toString(),
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
                 ),
@@ -100,6 +130,7 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
                 maxLines: 3,
                 onSaved: (descricao) =>
                     _dadosFormulario['descricao'] = descricao ?? '',
+                validator: (descricao) => Validador.campoString(descricao, 10),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -116,6 +147,7 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
                       onFieldSubmitted: (_) => _enviarFormulario(),
                       onSaved: (imagemUrl) =>
                           _dadosFormulario['imagemUrl'] = imagemUrl ?? '',
+                      validator: (url) => Validador.campoUrlImagem(url),
                     ),
                   ),
                   Container(
