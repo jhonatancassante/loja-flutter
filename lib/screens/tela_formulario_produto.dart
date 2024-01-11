@@ -169,10 +169,7 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
                             'Informe a URL...',
                             textAlign: TextAlign.center,
                           )
-                        : FittedBox(
-                            fit: BoxFit.cover,
-                            child: Image.network(_controladorImagemUrl.text),
-                          ),
+                        : Image.network(_controladorImagemUrl.text),
                   ),
                 ],
               ),
