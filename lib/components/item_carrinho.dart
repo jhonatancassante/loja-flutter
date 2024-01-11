@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja_flutter/components/confirmacao.dart';
 import 'package:loja_flutter/models/carrinho.dart';
 import 'package:loja_flutter/models/item_carrinho.dart';
 import 'package:loja_flutter/utils/formatar.dart';
@@ -29,26 +30,10 @@ class ItemCarrinhoWidget extends StatelessWidget {
         ),
       ),
       confirmDismiss: (_) {
-        return showDialog(
+        return confirmacao(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: const Text('Tem certeza?'),
-            content: const Text('Quer realmente remover o item do carrinho?'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(ctx).pop(false);
-                },
-                child: const Text('Não'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(ctx).pop(true);
-                },
-                child: const Text('Sim'),
-              ),
-            ],
-          ),
+          title: 'Tem certeza?',
+          content: 'Quer realmente remover o item do carrinho?',
         );
       },
       onDismissed: (_) => Provider.of<Carrinho>(
