@@ -19,6 +19,7 @@ class ListaProduto with ChangeNotifier {
       .toList();
 
   Future<void> carregarProdutos() async {
+    _itens.clear();
     final resposta = await http.get(Uri.parse(_urlProduto));
 
     if (resposta.body == 'null') return;
