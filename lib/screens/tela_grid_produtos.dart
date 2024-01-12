@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loja_flutter/components/app_drawer.dart';
 import 'package:loja_flutter/models/carrinho.dart';
 import 'package:loja_flutter/models/lista_produto.dart';
+import 'package:loja_flutter/utils/atualiza_lista_produtos.dart';
 import 'package:loja_flutter/utils/rotas.dart';
 import 'package:provider/provider.dart';
 
@@ -80,9 +81,12 @@ class _TelaGridProdutosState extends State<TelaGridProdutos> {
           ),
         ],
       ),
-      body: _estaCarregando
-          ? const Center(child: CircularProgressIndicator())
-          : GridProduto(_filtrarFavoritos),
+      body: RefreshIndicator(
+        onRefresh: () => atualizarListaProdutos(context),
+        child: _estaCarregando
+            ? const Center(child: CircularProgressIndicator())
+            : GridProduto(_filtrarFavoritos),
+      ),
       drawer: const AppDrawer(),
     );
   }
