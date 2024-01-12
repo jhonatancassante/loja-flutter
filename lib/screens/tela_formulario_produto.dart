@@ -18,6 +18,7 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
   final _controladorImagemUrl = TextEditingController();
   final _keyFormulario = GlobalKey<FormState>();
   final _dadosFormulario = <String, Object>{};
+  bool _estaCarregando = false;
 
   @override
   void initState() {
@@ -66,11 +67,15 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
 
     _keyFormulario.currentState?.save();
 
+    setState(() => _estaCarregando = true);
+
     Provider.of<ListaProduto>(
       context,
       listen: false,
-    ).salvarProduto(_dadosFormulario);
-    Navigator.of(context).pop();
+    ).salvarProduto(_dadosFormulario).then((value) {
+      setState(() => _estaCarregando = false);
+      Navigator.of(context).pop();
+    });
   }
 
   @override
@@ -85,98 +90,101 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Form(
-          key: _keyFormulario,
-          child: ListView(
-            children: [
-              TextFormField(
-                initialValue: _dadosFormulario['nome']?.toString(),
-                decoration: const InputDecoration(
-                  labelText: 'Nome',
-                ),
-                textInputAction: TextInputAction.next,
-                onFieldSubmitted: (_) {
-                  FocusScope.of(context).requestFocus(_focoPreco);
-                },
-                onSaved: (nome) => _dadosFormulario['nome'] = nome ?? '',
-                validator: (nome) => Validador.campoString(nome, 3),
-              ),
-              TextFormField(
-                initialValue: _dadosFormulario['preco']?.toString(),
-                decoration: const InputDecoration(
-                  labelText: 'Preço',
-                ),
-                textInputAction: TextInputAction.next,
-                focusNode: _focoPreco,
-                onFieldSubmitted: (_) {
-                  FocusScope.of(context).requestFocus(_focoDescricao);
-                },
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                onSaved: (preco) =>
-                    _dadosFormulario['preco'] = double.parse(preco ?? '0'),
-                validator: (preco) => Validador.campoNumerico(preco),
-              ),
-              TextFormField(
-                initialValue: _dadosFormulario['descricao']?.toString(),
-                decoration: const InputDecoration(
-                  labelText: 'Descrição',
-                ),
-                focusNode: _focoDescricao,
-                keyboardType: TextInputType.multiline,
-                maxLines: 3,
-                onSaved: (descricao) =>
-                    _dadosFormulario['descricao'] = descricao ?? '',
-                validator: (descricao) => Validador.campoString(descricao, 10),
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: TextFormField(
+      body: _estaCarregando
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Form(
+                key: _keyFormulario,
+                child: ListView(
+                  children: [
+                    TextFormField(
+                      initialValue: _dadosFormulario['nome']?.toString(),
                       decoration: const InputDecoration(
-                        labelText: 'URL da Imagem',
+                        labelText: 'Nome',
                       ),
-                      focusNode: _focoUrlImagem,
-                      keyboardType: TextInputType.url,
-                      textInputAction: TextInputAction.done,
-                      controller: _controladorImagemUrl,
-                      onFieldSubmitted: (_) => _enviarFormulario(),
-                      onSaved: (imagemUrl) =>
-                          _dadosFormulario['imagemUrl'] = imagemUrl ?? '',
-                      validator: (url) => Validador.campoUrlImagem(url),
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (_) {
+                        FocusScope.of(context).requestFocus(_focoPreco);
+                      },
+                      onSaved: (nome) => _dadosFormulario['nome'] = nome ?? '',
+                      validator: (nome) => Validador.campoString(nome, 3),
                     ),
-                  ),
-                  Container(
-                    width: 100,
-                    height: 100,
-                    margin: const EdgeInsets.only(
-                      top: 10,
-                      left: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey,
-                        width: 1,
+                    TextFormField(
+                      initialValue: _dadosFormulario['preco']?.toString(),
+                      decoration: const InputDecoration(
+                        labelText: 'Preço',
                       ),
+                      textInputAction: TextInputAction.next,
+                      focusNode: _focoPreco,
+                      onFieldSubmitted: (_) {
+                        FocusScope.of(context).requestFocus(_focoDescricao);
+                      },
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      onSaved: (preco) => _dadosFormulario['preco'] =
+                          double.parse(preco ?? '0'),
+                      validator: (preco) => Validador.campoNumerico(preco),
                     ),
-                    alignment: Alignment.center,
-                    child: _controladorImagemUrl.text.isEmpty
-                        ? const Text(
-                            'Informe a URL...',
-                            textAlign: TextAlign.center,
-                          )
-                        : Image.network(_controladorImagemUrl.text),
-                  ),
-                ],
+                    TextFormField(
+                      initialValue: _dadosFormulario['descricao']?.toString(),
+                      decoration: const InputDecoration(
+                        labelText: 'Descrição',
+                      ),
+                      focusNode: _focoDescricao,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: 3,
+                      onSaved: (descricao) =>
+                          _dadosFormulario['descricao'] = descricao ?? '',
+                      validator: (descricao) =>
+                          Validador.campoString(descricao, 10),
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            decoration: const InputDecoration(
+                              labelText: 'URL da Imagem',
+                            ),
+                            focusNode: _focoUrlImagem,
+                            keyboardType: TextInputType.url,
+                            textInputAction: TextInputAction.done,
+                            controller: _controladorImagemUrl,
+                            onFieldSubmitted: (_) => _enviarFormulario(),
+                            onSaved: (imagemUrl) =>
+                                _dadosFormulario['imagemUrl'] = imagemUrl ?? '',
+                            validator: (url) => Validador.campoUrlImagem(url),
+                          ),
+                        ),
+                        Container(
+                          width: 100,
+                          height: 100,
+                          margin: const EdgeInsets.only(
+                            top: 10,
+                            left: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey,
+                              width: 1,
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          child: _controladorImagemUrl.text.isEmpty
+                              ? const Text(
+                                  'Informe a URL...',
+                                  textAlign: TextAlign.center,
+                                )
+                              : Image.network(_controladorImagemUrl.text),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }
