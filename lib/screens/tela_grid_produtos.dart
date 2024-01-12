@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loja_flutter/components/app_drawer.dart';
 import 'package:loja_flutter/models/carrinho.dart';
+import 'package:loja_flutter/models/lista_produto.dart';
 import 'package:loja_flutter/utils/rotas.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +22,16 @@ class TelaGridProdutos extends StatefulWidget {
 
 class _TelaGridProdutosState extends State<TelaGridProdutos> {
   bool _filtrarFavoritos = false;
+
+  @override
+  initState() {
+    super.initState();
+
+    Provider.of<ListaProduto>(
+      context,
+      listen: false,
+    ).carregarProdutos();
+  }
 
   @override
   Widget build(BuildContext context) {
