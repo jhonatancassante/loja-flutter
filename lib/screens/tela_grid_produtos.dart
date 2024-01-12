@@ -22,6 +22,7 @@ class TelaGridProdutos extends StatefulWidget {
 
 class _TelaGridProdutosState extends State<TelaGridProdutos> {
   bool _filtrarFavoritos = false;
+  bool _estaCarregando = true;
 
   @override
   initState() {
@@ -30,7 +31,11 @@ class _TelaGridProdutosState extends State<TelaGridProdutos> {
     Provider.of<ListaProduto>(
       context,
       listen: false,
-    ).carregarProdutos();
+    ).carregarProdutos().then((value) {
+      setState(() {
+        _estaCarregando = false;
+      });
+    });
   }
 
   @override
@@ -75,7 +80,9 @@ class _TelaGridProdutosState extends State<TelaGridProdutos> {
           ),
         ],
       ),
-      body: GridProduto(_filtrarFavoritos),
+      body: _estaCarregando
+          ? const Center(child: CircularProgressIndicator())
+          : GridProduto(_filtrarFavoritos),
       drawer: const AppDrawer(),
     );
   }
