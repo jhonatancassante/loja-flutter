@@ -2,14 +2,14 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+import '../constants/url_base_db.dart';
 import '../data/dados_ficticios.dart';
 import '../models/produto.dart';
 
 class ListaProduto with ChangeNotifier {
   final List<Produto> _itens = produtosFicticios;
-  // final _urlBase = 'https://aulas-fluter1-default-rtdb.firebaseio.com/';
-  final _urlBase = 'https://aulas-flutter-shop-default-rtdb.firebaseio.com';
+  final _urlProduto = '$urlBaseDb/produtosTeste.json';
 
   List<Produto> get itens => [..._itens];
 
@@ -18,6 +18,11 @@ class ListaProduto with ChangeNotifier {
         (element) => element.eFavorito,
       )
       .toList();
+
+  Future<void> carregarProdutos() async {
+    final resposta = await http.get(Uri.parse(_urlProduto));
+    print(resposta.body);
+  }
 
   Future<void> salvarProduto(Map<String, Object> dados) async {
     bool temId = dados['id'] != null;
@@ -40,8 +45,8 @@ class ListaProduto with ChangeNotifier {
   }
 
   Future<void> adicionarProduto(Produto produto) async {
-    Response resposta = await post(
-      Uri.parse('$_urlBase/produtosTeste.json'),
+    final resposta = await http.post(
+      Uri.parse(_urlProduto),
       body: jsonEncode(
         {
           "nome": produto.nome,
