@@ -31,14 +31,16 @@ class ListaProduto with ChangeNotifier {
     );
 
     if (temId) {
-      return await atualizarProduto(produto);
+      await atualizarProduto(produto);
     } else {
-      return await adicionarProduto(produto);
+      await adicionarProduto(produto);
     }
+
+    notifyListeners();
   }
 
-  Future<void> adicionarProduto(Produto produto) {
-    return post(
+  Future<void> adicionarProduto(Produto produto) async {
+    Response resposta = await post(
       Uri.parse('$_urlBase/produtosTeste.json'),
       body: jsonEncode(
         {
@@ -49,21 +51,18 @@ class ListaProduto with ChangeNotifier {
           "eFavorito": produto.eFavorito,
         },
       ),
-    ).then<void>(
-      (response) {
-        final id = jsonDecode(response.body)['name'];
+    );
 
-        _itens.add(
-          Produto(
-            id: id,
-            nome: produto.nome,
-            descricao: produto.descricao,
-            preco: produto.preco,
-            imagemUrl: produto.imagemUrl,
-          ),
-        );
-        notifyListeners();
-      },
+    final id = jsonDecode(resposta.body)['name'];
+
+    _itens.add(
+      Produto(
+        id: id,
+        nome: produto.nome,
+        descricao: produto.descricao,
+        preco: produto.preco,
+        imagemUrl: produto.imagemUrl,
+      ),
     );
   }
 
@@ -74,7 +73,6 @@ class ListaProduto with ChangeNotifier {
 
     if (index >= 0) {
       _itens[index] = produto;
-      notifyListeners();
     }
 
     return Future.value();

@@ -60,7 +60,7 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
     Validador.campoUrlImagem(_controladorImagemUrl.text) ?? setState(() {});
   }
 
-  void _enviarFormulario() {
+  Future<void> _enviarFormulario() async {
     final eValido = _keyFormulario.currentState?.validate() ?? false;
 
     if (!eValido) return;
@@ -69,11 +69,16 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
 
     setState(() => _estaCarregando = true);
 
-    Provider.of<ListaProduto>(
-      context,
-      listen: false,
-    ).salvarProduto(_dadosFormulario).catchError((error) {
-      return showDialog<void>(
+    try {
+      await Provider.of<ListaProduto>(
+        context,
+        listen: false,
+      ).salvarProduto(_dadosFormulario);
+      if (!mounted) return;
+      Navigator.of(context).pop();
+    } catch (e) {
+      if (!mounted) return;
+      await showDialog<void>(
         context: context,
         builder: (ctx) => AlertDialog(
           title: const Text('Ocorreu um erro!'),
@@ -83,14 +88,13 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
               child: const Text('Ok'),
-            )
+            ),
           ],
         ),
       );
-    }).then((value) {
+    } finally {
       setState(() => _estaCarregando = false);
-      Navigator.of(context).pop();
-    });
+    }
   }
 
   @override
