@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import '../data/dados_ficticios.dart';
 import '../models/produto.dart';
 
@@ -19,7 +19,7 @@ class ListaProduto with ChangeNotifier {
       )
       .toList();
 
-  void salvarProduto(Map<String, Object> dados) {
+  Future<void> salvarProduto(Map<String, Object> dados) async {
     bool temId = dados['id'] != null;
 
     final produto = Produto(
@@ -31,16 +31,14 @@ class ListaProduto with ChangeNotifier {
     );
 
     if (temId) {
-      atualizarProduto(produto);
+      return await atualizarProduto(produto);
     } else {
-      adicionarProduto(produto);
+      return await adicionarProduto(produto);
     }
-
-    notifyListeners();
   }
 
-  void adicionarProduto(Produto produto) {
-    http.post(
+  Future<void> adicionarProduto(Produto produto) {
+    return post(
       Uri.parse('$_urlBase/produtosTeste.json'),
       body: jsonEncode(
         {
@@ -51,19 +49,35 @@ class ListaProduto with ChangeNotifier {
           "eFavorito": produto.eFavorito,
         },
       ),
-    );
+    ).then<void>(
+      (response) {
+        final id = jsonDecode(response.body)['name'];
 
-    _itens.add(produto);
+        _itens.add(
+          Produto(
+            id: id,
+            nome: produto.nome,
+            descricao: produto.descricao,
+            preco: produto.preco,
+            imagemUrl: produto.imagemUrl,
+          ),
+        );
+        notifyListeners();
+      },
+    );
   }
 
-  void atualizarProduto(Produto produto) {
+  Future<void> atualizarProduto(Produto produto) {
     int index = _itens.indexWhere(
       (element) => element.id == produto.id,
     );
 
     if (index >= 0) {
       _itens[index] = produto;
+      notifyListeners();
     }
+
+    return Future.value();
   }
 
   void removerProduto(Produto produto) {
