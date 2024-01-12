@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-Future<T?> confirmacao<T>({
+Future<bool?> confirmacao<T>({
   required BuildContext context,
   required String title,
   required String content,
-}) {
-  return showDialog(
+}) async {
+  return await showDialog(
     context: context,
     builder: (ctx) => AlertDialog(
       title: Text(title),
