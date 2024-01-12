@@ -72,7 +72,22 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
     Provider.of<ListaProduto>(
       context,
       listen: false,
-    ).salvarProduto(_dadosFormulario).then((value) {
+    ).salvarProduto(_dadosFormulario).catchError((error) {
+      return showDialog<void>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Ocorreu um erro!'),
+          content: const Text(
+              'Houve um erro ao salvar o produto. Tente novamente mais tarde.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text('Ok'),
+            )
+          ],
+        ),
+      );
+    }).then((value) {
       setState(() => _estaCarregando = false);
       Navigator.of(context).pop();
     });
