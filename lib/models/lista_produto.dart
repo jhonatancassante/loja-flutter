@@ -3,12 +3,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:loja_flutter/errors/http_exception.dart';
 import '../constants/url_base_db.dart';
 import '../models/produto.dart';
 
 class ListaProduto with ChangeNotifier {
   final List<Produto> _itens = [];
-  final _urlProduto = '$urlBaseDb/produtos.json';
+  final _urlProduto = '$urlBaseDb/produtos';
 
   List<Produto> get itens => [..._itens];
 
@@ -20,7 +21,7 @@ class ListaProduto with ChangeNotifier {
 
   Future<void> carregarProdutos() async {
     _itens.clear();
-    final resposta = await http.get(Uri.parse(_urlProduto));
+    final resposta = await http.get(Uri.parse('$_urlProduto.json'));
 
     if (resposta.body == 'null') return;
 
@@ -64,7 +65,7 @@ class ListaProduto with ChangeNotifier {
 
   Future<void> adicionarProduto(Produto produto) async {
     final resposta = await http.post(
-      Uri.parse(_urlProduto),
+      Uri.parse('$_urlProduto.json'),
       body: jsonEncode(
         {
           "nome": produto.nome,
@@ -89,27 +90,49 @@ class ListaProduto with ChangeNotifier {
     );
   }
 
-  Future<void> atualizarProduto(Produto produto) {
+  Future<void> atualizarProduto(Produto produto) async {
     int index = _itens.indexWhere(
       (element) => element.id == produto.id,
     );
 
     if (index >= 0) {
+      await http.patch(
+        Uri.parse('$_urlProduto/${produto.id}.json'),
+        body: jsonEncode(
+          {
+            "nome": produto.nome,
+            "descricao": produto.descricao,
+            "preco": produto.preco,
+            "imagemUrl": produto.imagemUrl,
+          },
+        ),
+      );
+
       _itens[index] = produto;
     }
-
-    return Future.value();
   }
 
-  void removerProduto(Produto produto) {
+  Future<void> removerProduto(Produto produto) async {
     int index = _itens.indexWhere(
       (element) => element.id == produto.id,
     );
 
     if (index >= 0) {
-      _itens.removeWhere(
-        (element) => element.id == produto.id,
+      final produto = _itens[index];
+      _itens.remove(produto);
+
+      final resposta = await http.delete(
+        Uri.parse('$_urlProduto/${produto.id}.json'),
       );
+
+      if (resposta.statusCode >= 400) {
+        _itens.insert(index, produto);
+        throw HttpException(
+          msg: 'Não foi possível excluir o produto.',
+          statusCode: resposta.statusCode,
+        );
+      }
+
       notifyListeners();
     }
   }
