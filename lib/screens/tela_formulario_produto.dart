@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja_flutter/components/mensagem_erro.dart';
 import 'package:loja_flutter/models/lista_produto.dart';
 import 'package:loja_flutter/models/produto.dart';
 import 'package:loja_flutter/utils/validador.dart';
@@ -78,19 +79,11 @@ class _TelaFormularioProdutoState extends State<TelaFormularioProduto> {
       Navigator.of(context).pop();
     } catch (e) {
       if (!mounted) return;
-      await showDialog<void>(
+      await mensagemErro(
         context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('Ocorreu um erro!'),
-          content: const Text(
-              'Houve um erro ao salvar o produto. Tente novamente mais tarde.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text('Ok'),
-            ),
-          ],
-        ),
+        title: 'Ocorreu um erro!',
+        content:
+            'Houve um erro ao salvar o produto. Tente novamente mais tarde.',
       );
     } finally {
       setState(() => _estaCarregando = false);
