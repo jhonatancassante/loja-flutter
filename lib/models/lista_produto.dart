@@ -36,6 +36,7 @@ class ListaProduto with ChangeNotifier {
             descricao: dadosProduto['descricao'],
             preco: dadosProduto['preco'].toDouble(),
             imagemUrl: dadosProduto['imagemUrl'],
+            eFavorito: dadosProduto['eFavorito'],
           ),
         );
       },
@@ -120,6 +121,7 @@ class ListaProduto with ChangeNotifier {
     if (index >= 0) {
       final produto = _itens[index];
       _itens.remove(produto);
+      notifyListeners();
 
       final resposta = await http.delete(
         Uri.parse('$_urlProduto/${produto.id}.json'),
@@ -127,13 +129,12 @@ class ListaProduto with ChangeNotifier {
 
       if (resposta.statusCode >= 400) {
         _itens.insert(index, produto);
+        notifyListeners();
         throw HttpException(
           msg: 'Não foi possível excluir o produto.',
           statusCode: resposta.statusCode,
         );
       }
-
-      notifyListeners();
     }
   }
 

@@ -17,6 +17,7 @@ class GridItemProduto extends StatelessWidget {
       context,
       listen: false,
     );
+    final msg = ScaffoldMessenger.of(context);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -25,7 +26,19 @@ class GridItemProduto extends StatelessWidget {
           backgroundColor: Colors.black87,
           leading: Consumer<Produto>(
             builder: (ctx, produto, child) => IconButton(
-              onPressed: produto.alternarFavorito,
+              onPressed: () async {
+                try {
+                  await produto.alternarFavorito();
+                } catch (error) {
+                  msg.showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        error.toString(),
+                      ),
+                    ),
+                  );
+                }
+              },
               icon: produto.eFavorito
                   ? const Icon(Icons.favorite)
                   : const Icon(Icons.favorite_border),
