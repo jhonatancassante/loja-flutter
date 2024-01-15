@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loja_flutter/models/pedido.dart';
 import 'package:loja_flutter/utils/formatar.dart';
+import 'package:loja_flutter/utils/tamanho_linha.dart';
 
 class PedidoWidget extends StatefulWidget {
   final Pedido pedido;
@@ -44,27 +45,37 @@ class _PedidoWidgetState extends State<PedidoWidget> {
                 horizontal: 15,
                 vertical: 4,
               ),
-              height: (widget.pedido.produtos.length.toDouble()) * 25.0 + 30.0,
+              height: tamanhoLinha(widget.pedido.produtos) + 30.0,
+              // height: (widget.pedido.produtos.length.toDouble()) * 40.0 + 30.0,
               child: ListView(
                 children: widget.pedido.produtos.map(
                   (produto) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    return Column(
                       children: [
-                        Text(
-                          produto.nomeProduto,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                produto.nomeProduto,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 3,
+                              ),
+                            ),
+                            Text(
+                              '${produto.quantidade}x R\$ ${Formatar.moeda(produto.preco)}',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey,
+                              ),
+                            )
+                          ],
                         ),
-                        Text(
-                          '${produto.quantidade}x R\$ ${Formatar.moeda(produto.preco)}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey,
-                          ),
-                        )
+                        const Divider(),
                       ],
                     );
                   },
