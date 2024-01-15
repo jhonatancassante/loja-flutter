@@ -4,8 +4,28 @@ import 'package:loja_flutter/components/pedido.dart';
 import 'package:loja_flutter/models/lista_pedido.dart';
 import 'package:provider/provider.dart';
 
-class TelaPedidos extends StatelessWidget {
+import '../utils/atualiza_lista_pedidos.dart';
+
+class TelaPedidos extends StatefulWidget {
   const TelaPedidos({super.key});
+
+  @override
+  State<TelaPedidos> createState() => _TelaPedidosState();
+}
+
+class _TelaPedidosState extends State<TelaPedidos> {
+  bool _estaCarregando = true;
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ListaPedido>(
+      context,
+      listen: false,
+    ).carregarPedidos().then((_) {
+      setState(() => _estaCarregando = false);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +36,17 @@ class TelaPedidos extends StatelessWidget {
         title: const Text('Meus Pedidos'),
       ),
       drawer: const AppDrawer(),
-      body: ListView.builder(
-        itemCount: pedidos.contagemItens,
-        itemBuilder: (ctx, i) => PedidoWidget(
-          pedido: pedidos.itens[i],
-        ),
-      ),
+      body: _estaCarregando
+          ? const Center(child: CircularProgressIndicator())
+          : RefreshIndicator(
+              onRefresh: () => atualizarListaPedidos(context),
+              child: ListView.builder(
+                itemCount: pedidos.contagemItens,
+                itemBuilder: (ctx, i) => PedidoWidget(
+                  pedido: pedidos.itens[i],
+                ),
+              ),
+            ),
     );
   }
 }
