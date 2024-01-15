@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:loja_flutter/constants/url_base_db.dart';
 import 'package:loja_flutter/models/carrinho.dart';
+import 'package:loja_flutter/models/item_carrinho.dart';
 import 'package:loja_flutter/models/pedido.dart';
 
 class ListaPedido with ChangeNotifier {
   final List<Pedido> _itens = [];
+  static const _urlPedido = '$urlBaseDb/pedidos';
 
   List<Pedido> get itens {
     return [..._itens];
@@ -17,10 +19,41 @@ class ListaPedido with ChangeNotifier {
     return _itens.length;
   }
 
+  Future<void> carregarPedidos() async {
+    _itens.clear();
+    final resposta = await http.get(Uri.parse('$_urlPedido.json'));
+
+    if (resposta.body == 'null') return;
+
+    Map<String, dynamic> dados = jsonDecode(resposta.body);
+
+    dados.forEach(
+      (idPedido, dadosPedido) {
+        _itens.add(
+          Pedido(
+            id: idPedido,
+            total: dadosPedido['total'].toDouble(),
+            data: DateTime.parse(dadosPedido['data']),
+            produtos: (dadosPedido['produtos'] as List<dynamic>).map((item) {
+              return ItemCarrinho(
+                id: item['id'],
+                idProduto: item['idProduto'],
+                nomeProduto: item['nomeProduto'],
+                quantidade: item['quantidade'],
+                preco: item['preco'].toDouble(),
+              );
+            }).toList(),
+          ),
+        );
+      },
+    );
+    notifyListeners();
+  }
+
   Future<void> adicionaPedido(Carrinho carrinho) async {
     final data = DateTime.now();
     final resposta = await http.post(
-      Uri.parse('$urlBaseDb/pedidos.json'),
+      Uri.parse('$_urlPedido.json'),
       body: jsonEncode(
         {
           'total': carrinho.total,
