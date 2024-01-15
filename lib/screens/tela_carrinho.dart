@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:loja_flutter/components/item_carrinho.dart';
 import 'package:loja_flutter/models/carrinho.dart';
-import 'package:loja_flutter/models/lista_pedido.dart';
 import 'package:loja_flutter/utils/formatar.dart';
 import 'package:provider/provider.dart';
+
+import '../components/botao_carrinho.dart';
 
 class TelaCarrinho extends StatelessWidget {
   const TelaCarrinho({super.key});
@@ -50,21 +51,7 @@ class TelaCarrinho extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  TextButton(
-                    onPressed: () {
-                      Provider.of<ListaPedido>(
-                        context,
-                        listen: false,
-                      ).adicionaPedido(carrinho);
-                      carrinho.limpar();
-                    },
-                    style: TextButton.styleFrom(
-                      textStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                    child: const Text('COMPRAR'),
-                  ),
+                  BotaoCarrinho(carrinho: carrinho),
                 ],
               ),
             ),
