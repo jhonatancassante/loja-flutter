@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja_flutter/constants/tamanhos_box_login.dart';
 import 'package:loja_flutter/utils/validador.dart';
 
 enum ModoAutenticacao { signup, login }
@@ -19,15 +20,22 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
     'email': '',
     'senha': '',
   };
+  double _tamanhoBox = boxLogin;
 
   bool _eLogin() => _modoAutenticacao == ModoAutenticacao.login;
   bool _eSignup() => _modoAutenticacao == ModoAutenticacao.signup;
 
   void _trocarModo() {
     setState(() {
-      _modoAutenticacao =
-          _eLogin() ? ModoAutenticacao.signup : ModoAutenticacao.login;
+      if (_eLogin()) {
+        _modoAutenticacao = ModoAutenticacao.signup;
+        _tamanhoBox = boxSignup;
+      } else {
+        _modoAutenticacao = ModoAutenticacao.login;
+        _tamanhoBox = boxLogin;
+      }
     });
+    _formKey.currentState?.reset();
   }
 
   void _enviar() {
@@ -60,7 +68,7 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
       ),
       child: Container(
         padding: const EdgeInsets.all(16),
-        height: _eLogin() ? 310 : 400,
+        height: _tamanhoBox,
         width: tamanhoDispositivo.width * 0.75,
         child: Form(
           key: _formKey,
@@ -80,8 +88,18 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
                 ),
                 obscureText: true,
                 controller: _controladorSenha,
-                validator:
-                    _eLogin() ? null : (senha) => Validador.campoSenha(senha),
+                validator: (senha) {
+                  final retorno = Validador.campoSenha(
+                    senha,
+                    _eLogin(),
+                  );
+
+                  (retorno?.length ?? 0) > 40
+                      ? setState(() => _tamanhoBox = boxSignupErroSenha)
+                      : setState(() => _tamanhoBox = boxSignup);
+
+                  return retorno;
+                },
                 onSaved: (senha) => _dadosAutenticacao['senha'] = senha ?? '',
               ),
               if (_eSignup())
