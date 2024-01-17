@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loja_flutter/models/carrinho.dart';
 import 'package:loja_flutter/models/lista_pedido.dart';
+import 'package:loja_flutter/screens/tela_autenticacao.dart';
 import 'package:loja_flutter/screens/tela_carrinho.dart';
 import 'package:loja_flutter/screens/tela_formulario_produto.dart';
 import 'package:loja_flutter/screens/tela_pedidos.dart';
@@ -55,9 +56,16 @@ class MyApp extends StatelessWidget {
               color: Colors.white,
             ),
           ),
+          buttonTheme: tema.buttonTheme.copyWith(
+            colorScheme: tema.buttonTheme.colorScheme?.copyWith(
+              background: Colors.deepPurpleAccent[400],
+              surface: Colors.white,
+            ),
+          ),
         ),
         debugShowCheckedModeBanner: false,
         routes: {
+          Rotas.auth: (ctx) => const TelaAutenticacao(),
           Rotas.home: (ctx) => const TelaGridProdutos(),
           Rotas.detalheProduto: (ctx) => const TelaDetalheProduto(),
           Rotas.carrinho: (ctx) => const TelaCarrinho(),
