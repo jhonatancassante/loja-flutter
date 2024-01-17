@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:loja_flutter/constants/tamanhos_box_login.dart';
+import 'package:loja_flutter/models/autenticacao.dart';
 import 'package:loja_flutter/utils/validador.dart';
+import 'package:provider/provider.dart';
 
 enum ModoAutenticacao { signup, login }
 
@@ -38,7 +40,7 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
     _formKey.currentState?.reset();
   }
 
-  void _enviar() {
+  Future<void> _enviar() async {
     final estaValido = _formKey.currentState?.validate() ?? false;
 
     if (!estaValido) return;
@@ -46,12 +48,21 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
     setState(() => _estaCarregando = true);
 
     _formKey.currentState?.save();
+    Autenticacao autenticacao = Provider.of<Autenticacao>(
+      context,
+      listen: false,
+    );
 
     if (_eLogin()) {
       //Login
     } else {
-      //Register
+      await autenticacao.signup(
+        _dadosAutenticacao['email']!,
+        _dadosAutenticacao['senha']!,
+      );
     }
+
+    _formKey.currentState?.reset();
 
     setState(() => _estaCarregando = false);
   }
