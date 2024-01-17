@@ -50,25 +50,31 @@ class Validador {
     return null;
   }
 
-  static String? campoSenha(String? senha) {
+  static String? campoSenha(
+    String? senha,
+    bool eLogin,
+  ) {
     final senhaTemp = senha ?? '';
-    String pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[_%$#@])$';
+    String pattern = r"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[_%$#@]).{8,}$";
     RegExp regExp = RegExp(pattern);
 
     if (senhaTemp.trim().isEmpty) {
       return 'Campo de senha vazio.';
     }
 
-    if (senhaTemp.length < 8) {
-      return 'Senha muito curta. Deve conter ao menos 8 dígitos.';
-    }
+    if (!eLogin) {
+      if (senhaTemp.length < 8) {
+        return 'Senha deve conter ao menos 8 dígitos.';
+      }
 
-    if (!regExp.hasMatch(senhaTemp)) {
-      return '''Sua senha deve ter:
+      if (!regExp.hasMatch(senhaTemp)) {
+        return '''Sua senha deve ter:
       • Pelo menos uma letra maiúscula ([A-Z])
       • Pelo menos uma letra minúscula ([a-z])
       • Pelo menos um dígito ([0-9])
-      • Pelo menos um caractere especial (_%\$#@)''';
+      • Pelo menos um caractere especial
+      (_%\$#@)''';
+      }
     }
 
     return null;
