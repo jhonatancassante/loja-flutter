@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:loja_flutter/errors/http_exception.dart';
+import 'package:loja_flutter/errors/http_excecao.dart';
 import '../constants/url_base_db.dart';
 import '../models/produto.dart';
 
