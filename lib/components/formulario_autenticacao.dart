@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loja_flutter/constants/tamanhos_box_login.dart';
 import 'package:loja_flutter/models/autenticacao.dart';
+import 'package:loja_flutter/utils/tamanho_box_login.dart';
 import 'package:loja_flutter/utils/validador.dart';
 import 'package:provider/provider.dart';
 
@@ -23,25 +24,36 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
     'senha': '',
   };
   double _tamanhoBox = boxLogin;
+  int _tamanhoErro = 0;
 
   bool _eLogin() => _modoAutenticacao == ModoAutenticacao.login;
   bool _eSignup() => _modoAutenticacao == ModoAutenticacao.signup;
 
   void _trocarModo() {
     setState(() {
-      if (_eLogin()) {
-        _modoAutenticacao = ModoAutenticacao.signup;
-        _tamanhoBox = boxSignup;
-      } else {
-        _modoAutenticacao = ModoAutenticacao.login;
-        _tamanhoBox = boxLogin;
-      }
+      _eLogin()
+          ? _modoAutenticacao = ModoAutenticacao.signup
+          : _modoAutenticacao = ModoAutenticacao.login;
+
+      _tamanhoBox = tamanhoBoxLogin(
+        _tamanhoErro,
+        _eLogin(),
+      );
     });
     _formKey.currentState?.reset();
   }
 
   Future<void> _enviar() async {
     final estaValido = _formKey.currentState?.validate() ?? false;
+
+    setState(
+      () => _tamanhoBox = tamanhoBoxLogin(
+        _tamanhoErro,
+        _eLogin(),
+      ),
+    );
+
+    _tamanhoErro = 0;
 
     if (!estaValido) return;
 
@@ -56,7 +68,7 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
     if (_eLogin()) {
       //Login
     } else {
-      await autenticacao.signup(
+      await autenticacao.signUp(
         _dadosAutenticacao['email']!,
         _dadosAutenticacao['senha']!,
       );
@@ -90,7 +102,11 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
                   labelText: "E-mail",
                 ),
                 keyboardType: TextInputType.emailAddress,
-                validator: (email) => Validador.campoEmail(email),
+                validator: (email) {
+                  final retorno = Validador.campoEmail(email);
+                  _tamanhoErro += (retorno?.length ?? 0);
+                  return retorno;
+                },
                 onSaved: (email) => _dadosAutenticacao['email'] = email ?? '',
               ),
               TextFormField(
@@ -104,26 +120,25 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
                     senha,
                     _eLogin(),
                   );
-
-                  (retorno?.length ?? 0) > 40
-                      ? setState(() => _tamanhoBox = boxSignupErroSenha)
-                      : setState(() => _tamanhoBox = boxSignup);
-
+                  _tamanhoErro += (retorno?.length ?? 0);
                   return retorno;
                 },
                 onSaved: (senha) => _dadosAutenticacao['senha'] = senha ?? '',
               ),
               if (_eSignup())
                 TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Confirmar senha",
-                  ),
-                  obscureText: true,
-                  validator: (senha) => Validador.campoConfirmaSenha(
-                    senha,
-                    _controladorSenha,
-                  ),
-                ),
+                    decoration: const InputDecoration(
+                      labelText: "Confirmar senha",
+                    ),
+                    obscureText: true,
+                    validator: (senha) {
+                      final retorno = Validador.campoConfirmaSenha(
+                        senha,
+                        _controladorSenha,
+                      );
+                      _tamanhoErro += (retorno?.length ?? 0);
+                      return retorno;
+                    }),
               const SizedBox(height: 20),
               _estaCarregando
                   ? const CircularProgressIndicator()
