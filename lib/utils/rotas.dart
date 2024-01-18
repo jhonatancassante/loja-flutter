@@ -1,6 +1,5 @@
 class Rotas {
-  static const auth = '/';
-  static const home = '/home';
+  static const authOuHome = '/';
   static const detalheProduto = '/detalhe-produto';
   static const carrinho = '/carrinho';
   static const pedidos = '/pedidos';

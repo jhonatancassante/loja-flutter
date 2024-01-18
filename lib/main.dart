@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loja_flutter/models/autenticacao.dart';
 import 'package:loja_flutter/models/carrinho.dart';
 import 'package:loja_flutter/models/lista_pedido.dart';
-import 'package:loja_flutter/screens/tela_autenticacao.dart';
+import 'package:loja_flutter/screens/tela_auth_ou_home.dart';
 import 'package:loja_flutter/screens/tela_carrinho.dart';
 import 'package:loja_flutter/screens/tela_formulario_produto.dart';
 import 'package:loja_flutter/screens/tela_pedidos.dart';
@@ -10,7 +10,6 @@ import 'package:loja_flutter/screens/tela_produtos.dart';
 import 'package:provider/provider.dart';
 import 'models/lista_produto.dart';
 import 'screens/tela_detalhe_produto.dart';
-import 'screens/tela_grid_produtos.dart';
 import 'utils/rotas.dart';
 
 void main() {
@@ -69,8 +68,7 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         routes: {
-          Rotas.auth: (ctx) => const TelaAutenticacao(),
-          Rotas.home: (ctx) => const TelaGridProdutos(),
+          Rotas.authOuHome: (ctx) => const TelaAuthOuHome(),
           Rotas.detalheProduto: (ctx) => const TelaDetalheProduto(),
           Rotas.carrinho: (ctx) => const TelaCarrinho(),
           Rotas.pedidos: (ctx) => const TelaPedidos(),
