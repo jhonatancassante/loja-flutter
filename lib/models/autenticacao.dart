@@ -7,6 +7,28 @@ import 'package:loja_flutter/constants/url_base_autenticacao.dart';
 import 'package:loja_flutter/errors/autenticacao_excecao.dart';
 
 class Autenticacao with ChangeNotifier {
+  String? _token;
+  String? _email;
+  String? _uid;
+  DateTime? _dataExpiracao;
+
+  bool get estaAutenticado {
+    final eValido = _dataExpiracao?.isAfter(DateTime.now()) ?? false;
+    return _token != null && eValido;
+  }
+
+  String? get token {
+    return estaAutenticado ? _token : null;
+  }
+
+  String? get email {
+    return estaAutenticado ? _email : null;
+  }
+
+  String? get uid {
+    return estaAutenticado ? _uid : null;
+  }
+
   Future<void> _autenticar(String email, String senha, String tipoUrl) async {
     final resposta = await http.post(
       Uri.parse('$urlBaseAutenticacao:$tipoUrl?key=$apiKey'),
@@ -21,6 +43,16 @@ class Autenticacao with ChangeNotifier {
 
     if (body['error'] != null) {
       throw AutenticacaoExcecao(body['error']['message']);
+    } else {
+      _token = body['idToken'];
+      _email = body['email'];
+      _uid = body['localId'];
+      _dataExpiracao = DateTime.now().add(
+        Duration(
+          seconds: int.parse(body['expiresIn']),
+        ),
+      );
+      notifyListeners();
     }
   }
 
