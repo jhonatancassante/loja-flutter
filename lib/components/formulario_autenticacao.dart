@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja_flutter/components/mensagem_erro.dart';
 import 'package:loja_flutter/models/autenticacao.dart';
 import 'package:loja_flutter/utils/tamanho_box_login.dart';
 import 'package:loja_flutter/utils/validador.dart';
@@ -40,6 +41,7 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
       );
     });
     _formKey.currentState?.reset();
+    _controladorSenha.clear();
   }
 
   Future<void> _enviar() async {
@@ -64,16 +66,29 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
       listen: false,
     );
 
-    if (_eLogin()) {
-      //Login
-    } else {
-      await autenticacao.signUp(
-        _dadosAutenticacao['email']!,
-        _dadosAutenticacao['senha']!,
+    try {
+      if (_eLogin()) {
+        await autenticacao.signIn(
+          _dadosAutenticacao['email']!,
+          _dadosAutenticacao['senha']!,
+        );
+      } else {
+        await autenticacao.signUp(
+          _dadosAutenticacao['email']!,
+          _dadosAutenticacao['senha']!,
+        );
+      }
+    } catch (erro) {
+      if (!context.mounted) return;
+      mensagemErro(
+        context: context,
+        title: 'Ocorreu um erro!',
+        content: erro.toString(),
       );
     }
 
-    _formKey.currentState?.reset();
+    // _formKey.currentState?.reset();
+    // _controladorSenha.clear();
 
     setState(() => _estaCarregando = false);
   }
