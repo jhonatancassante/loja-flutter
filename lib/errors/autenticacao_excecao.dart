@@ -15,6 +15,6 @@ class AutenticacaoExcecao implements Exception {
 
   @override
   String toString() {
-    return erros['key'] ?? 'Ocorreu um erro no processo de autenticação.';
+    return erros[key] ?? 'Ocorreu um erro no processo de autenticação.';
   }
 }
