@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:loja_flutter/constants/tamanhos_box_login.dart';
 import 'package:loja_flutter/models/autenticacao.dart';
 import 'package:loja_flutter/utils/tamanho_box_login.dart';
 import 'package:loja_flutter/utils/validador.dart';
@@ -23,7 +22,7 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
     'email': '',
     'senha': '',
   };
-  double _tamanhoBox = boxLogin;
+  double _tamanhoBox = 0;
   int _tamanhoErro = 0;
 
   bool _eLogin() => _modoAutenticacao == ModoAutenticacao.login;
@@ -77,6 +76,15 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
     _formKey.currentState?.reset();
 
     setState(() => _estaCarregando = false);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _tamanhoBox = tamanhoBoxLogin(
+      _tamanhoErro,
+      _eLogin(),
+    );
   }
 
   @override
