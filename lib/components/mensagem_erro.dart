@@ -8,8 +8,24 @@ Future<void> mensagemErro<T>({
   return await showDialog<void>(
     context: context,
     builder: (ctx) => AlertDialog(
-      title: Text(title),
-      content: Text(content),
+      title: Row(
+        children: [
+          Icon(
+            Icons.error,
+            color: Theme.of(context).colorScheme.error,
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          Text(title),
+        ],
+      ),
+      content: Text(
+        content,
+        style: const TextStyle(
+          fontSize: 16,
+        ),
+      ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(ctx).pop(),
