@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja_flutter/models/autenticacao.dart';
 import 'package:provider/provider.dart';
 import '../utils/rotas.dart';
 import '../models/produto.dart';
@@ -17,6 +18,10 @@ class GridItemProduto extends StatelessWidget {
       context,
       listen: false,
     );
+    final autenticacao = Provider.of<Autenticacao>(
+      context,
+      listen: false,
+    );
     final msg = ScaffoldMessenger.of(context);
 
     return ClipRRect(
@@ -28,7 +33,9 @@ class GridItemProduto extends StatelessWidget {
             builder: (ctx, produto, child) => IconButton(
               onPressed: () async {
                 try {
-                  await produto.alternarFavorito();
+                  await produto.alternarFavorito(
+                    autenticacao.token ?? '',
+                  );
                 } catch (error) {
                   msg.showSnackBar(
                     SnackBar(

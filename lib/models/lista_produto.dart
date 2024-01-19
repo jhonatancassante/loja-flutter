@@ -8,20 +8,24 @@ import '../constants/url_base_db.dart';
 import '../models/produto.dart';
 
 class ListaProduto with ChangeNotifier {
-  final List<Produto> _itens = [];
+  final String _token;
+  final List<Produto> _itens;
   final _urlProduto = '$urlBaseDb/produtos';
 
   List<Produto> get itens => [..._itens];
 
-  List<Produto> get itensFavorito => _itens
-      .where(
-        (element) => element.eFavorito,
-      )
-      .toList();
+  List<Produto> get itensFavorito =>
+      _itens.where((element) => element.eFavorito).toList();
+
+  ListaProduto(
+    this._token,
+    this._itens,
+  );
 
   Future<void> carregarProdutos() async {
     _itens.clear();
-    final resposta = await http.get(Uri.parse('$_urlProduto.json'));
+    final resposta =
+        await http.get(Uri.parse('$_urlProduto.json?auth=$_token'));
 
     if (resposta.body == 'null') return;
 
@@ -66,7 +70,7 @@ class ListaProduto with ChangeNotifier {
 
   Future<void> adicionarProduto(Produto produto) async {
     final resposta = await http.post(
-      Uri.parse('$_urlProduto.json'),
+      Uri.parse('$_urlProduto.json?auth=$_token'),
       body: jsonEncode(
         {
           "nome": produto.nome,
@@ -98,7 +102,7 @@ class ListaProduto with ChangeNotifier {
 
     if (index >= 0) {
       await http.patch(
-        Uri.parse('$_urlProduto/${produto.id}.json'),
+        Uri.parse('$_urlProduto/${produto.id}.json?auth=$_token'),
         body: jsonEncode(
           {
             "nome": produto.nome,
@@ -124,7 +128,7 @@ class ListaProduto with ChangeNotifier {
       notifyListeners();
 
       final resposta = await http.delete(
-        Uri.parse('$_urlProduto/${produto.id}.json'),
+        Uri.parse('$_urlProduto/${produto.id}.json?auth=$_token'),
       );
 
       if (resposta.statusCode >= 400) {

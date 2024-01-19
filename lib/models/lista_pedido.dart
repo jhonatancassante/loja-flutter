@@ -8,7 +8,8 @@ import 'package:loja_flutter/models/item_carrinho.dart';
 import 'package:loja_flutter/models/pedido.dart';
 
 class ListaPedido with ChangeNotifier {
-  final List<Pedido> _itens = [];
+  final String _token;
+  List<Pedido> _itens;
   static const _urlPedido = '$urlBaseDb/pedidos';
 
   List<Pedido> get itens {
@@ -19,9 +20,15 @@ class ListaPedido with ChangeNotifier {
     return _itens.length;
   }
 
+  ListaPedido(
+    this._token,
+    this._itens,
+  );
+
   Future<void> carregarPedidos() async {
-    _itens.clear();
-    final resposta = await http.get(Uri.parse('$_urlPedido.json'));
+    List<Pedido> itens = [];
+
+    final resposta = await http.get(Uri.parse('$_urlPedido.json?auth=$_token'));
 
     if (resposta.body == 'null') return;
 
@@ -29,7 +36,7 @@ class ListaPedido with ChangeNotifier {
 
     dados.forEach(
       (idPedido, dadosPedido) {
-        _itens.add(
+        itens.add(
           Pedido(
             id: idPedido,
             total: dadosPedido['total'].toDouble(),
@@ -47,13 +54,14 @@ class ListaPedido with ChangeNotifier {
         );
       },
     );
+    _itens = itens.reversed.toList();
     notifyListeners();
   }
 
   Future<void> adicionaPedido(Carrinho carrinho) async {
     final data = DateTime.now();
     final resposta = await http.post(
-      Uri.parse('$_urlPedido.json'),
+      Uri.parse('$_urlPedido.json?auth=$_token'),
       body: jsonEncode(
         {
           'total': carrinho.total,

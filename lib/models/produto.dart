@@ -27,11 +27,11 @@ class Produto with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> alternarFavorito() async {
+  Future<void> alternarFavorito(String token) async {
     _alternarFavorito();
 
     final resposta = await http.patch(
-      Uri.parse('$urlBaseDb/produtos/$id.json'),
+      Uri.parse('$urlBaseDb/produtos/$id.json?auth=$token'),
       body: jsonEncode({"eFavorito": eFavorito}),
     );
 
