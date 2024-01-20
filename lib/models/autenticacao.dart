@@ -9,7 +9,7 @@ import 'package:loja_flutter/errors/autenticacao_excecao.dart';
 class Autenticacao with ChangeNotifier {
   String? _token;
   String? _email;
-  String? _uid;
+  String? _idUsuario;
   DateTime? _dataExpiracao;
 
   bool get estaAutenticado {
@@ -25,8 +25,8 @@ class Autenticacao with ChangeNotifier {
     return estaAutenticado ? _email : null;
   }
 
-  String? get uid {
-    return estaAutenticado ? _uid : null;
+  String? get idUsuario {
+    return estaAutenticado ? _idUsuario : null;
   }
 
   Future<void> _autenticar(String email, String senha, String tipoUrl) async {
@@ -46,7 +46,7 @@ class Autenticacao with ChangeNotifier {
     } else {
       _token = body['idToken'];
       _email = body['email'];
-      _uid = body['localId'];
+      _idUsuario = body['localId'];
       _dataExpiracao = DateTime.now().add(
         Duration(
           seconds: int.parse(body['expiresIn']),

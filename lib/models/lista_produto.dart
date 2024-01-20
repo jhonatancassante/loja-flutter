@@ -9,6 +9,7 @@ import '../models/produto.dart';
 
 class ListaProduto with ChangeNotifier {
   final String _token;
+  final String _idUsuario;
   final List<Produto> _itens;
   final _urlProduto = '$urlBaseDb/produtos';
 
@@ -17,10 +18,11 @@ class ListaProduto with ChangeNotifier {
   List<Produto> get itensFavorito =>
       _itens.where((element) => element.eFavorito).toList();
 
-  ListaProduto(
-    this._token,
-    this._itens,
-  );
+  ListaProduto([
+    this._token = '',
+    this._idUsuario = '',
+    this._itens = const [],
+  ]);
 
   Future<void> carregarProdutos() async {
     _itens.clear();
@@ -29,10 +31,20 @@ class ListaProduto with ChangeNotifier {
 
     if (resposta.body == 'null') return;
 
+    final favResposta = await http.get(
+      Uri.parse(
+        '$urlBaseDb/favoritos/$_idUsuario.json?auth=$_token',
+      ),
+    );
+
+    Map<String, dynamic> dadosFav =
+        favResposta.body == 'null' ? {} : jsonDecode(favResposta.body);
+
     Map<String, dynamic> dados = jsonDecode(resposta.body);
 
     dados.forEach(
       (idProduto, dadosProduto) {
+        final eFavorito = dadosFav[idProduto] ?? false;
         _itens.add(
           Produto(
             id: idProduto,
@@ -40,7 +52,7 @@ class ListaProduto with ChangeNotifier {
             descricao: dadosProduto['descricao'],
             preco: dadosProduto['preco'].toDouble(),
             imagemUrl: dadosProduto['imagemUrl'],
-            eFavorito: dadosProduto['eFavorito'],
+            eFavorito: eFavorito,
           ),
         );
       },
@@ -77,7 +89,6 @@ class ListaProduto with ChangeNotifier {
           "descricao": produto.descricao,
           "preco": produto.preco,
           "imagemUrl": produto.imagemUrl,
-          "eFavorito": produto.eFavorito,
         },
       ),
     );
