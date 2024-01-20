@@ -9,6 +9,7 @@ import 'package:loja_flutter/models/pedido.dart';
 
 class ListaPedido with ChangeNotifier {
   final String _token;
+  final String _idUsuario;
   List<Pedido> _itens;
   static const _urlPedido = '$urlBaseDb/pedidos';
 
@@ -20,15 +21,17 @@ class ListaPedido with ChangeNotifier {
     return _itens.length;
   }
 
-  ListaPedido(
-    this._token,
-    this._itens,
-  );
+  ListaPedido([
+    this._token = '',
+    this._idUsuario = '',
+    this._itens = const [],
+  ]);
 
   Future<void> carregarPedidos() async {
     List<Pedido> itens = [];
 
-    final resposta = await http.get(Uri.parse('$_urlPedido.json?auth=$_token'));
+    final resposta =
+        await http.get(Uri.parse('$_urlPedido/$_idUsuario.json?auth=$_token'));
 
     if (resposta.body == 'null') return;
 
@@ -61,7 +64,7 @@ class ListaPedido with ChangeNotifier {
   Future<void> adicionaPedido(Carrinho carrinho) async {
     final data = DateTime.now();
     final resposta = await http.post(
-      Uri.parse('$_urlPedido.json?auth=$_token'),
+      Uri.parse('$_urlPedido/$_idUsuario.json?auth=$_token'),
       body: jsonEncode(
         {
           'total': carrinho.total,

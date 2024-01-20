@@ -35,6 +35,7 @@ class GridItemProduto extends StatelessWidget {
                 try {
                   await produto.alternarFavorito(
                     autenticacao.token ?? '',
+                    autenticacao.idUsuario ?? '',
                   );
                 } catch (error) {
                   msg.showSnackBar(

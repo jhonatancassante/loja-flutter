@@ -33,16 +33,18 @@ class MyApp extends StatelessWidget {
           create: (_) => Autenticacao(),
         ),
         ChangeNotifierProxyProvider<Autenticacao, ListaProduto>(
-          create: (_) => ListaProduto('', []),
+          create: (_) => ListaProduto(),
           update: (ctx, autenticacao, anterior) => ListaProduto(
             autenticacao.token ?? '',
+            autenticacao.idUsuario ?? '',
             anterior?.itens ?? [],
           ),
         ),
         ChangeNotifierProxyProvider<Autenticacao, ListaPedido>(
-          create: (_) => ListaPedido('', []),
+          create: (_) => ListaPedido(),
           update: (ctx, autenticacao, anterior) => ListaPedido(
             autenticacao.token ?? '',
+            autenticacao.idUsuario ?? '',
             anterior?.itens ?? [],
           ),
         ),
