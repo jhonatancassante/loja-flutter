@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -10,10 +11,11 @@ class Autenticacao with ChangeNotifier {
   String? _token;
   String? _email;
   String? _idUsuario;
-  DateTime? _dataExpiracao;
+  DateTime? _dataExpirar;
+  Timer? _signOutTimer;
 
   bool get estaAutenticado {
-    final eValido = _dataExpiracao?.isAfter(DateTime.now()) ?? false;
+    final eValido = _dataExpirar?.isAfter(DateTime.now()) ?? false;
     return _token != null && eValido;
   }
 
@@ -47,11 +49,12 @@ class Autenticacao with ChangeNotifier {
       _token = body['idToken'];
       _email = body['email'];
       _idUsuario = body['localId'];
-      _dataExpiracao = DateTime.now().add(
+      _dataExpirar = DateTime.now().add(
         Duration(
           seconds: int.parse(body['expiresIn']),
         ),
       );
+      _autoSignOut();
       notifyListeners();
     }
   }
@@ -68,7 +71,22 @@ class Autenticacao with ChangeNotifier {
     _token = null;
     _email = null;
     _idUsuario = null;
-    _dataExpiracao = null;
+    _dataExpirar = null;
+    _limparSignOutTimer();
     notifyListeners();
+  }
+
+  void _limparSignOutTimer() {
+    _signOutTimer?.cancel();
+    _signOutTimer = null;
+  }
+
+  void _autoSignOut() {
+    _limparSignOutTimer();
+    final tempoSingOut = _dataExpirar?.difference(DateTime.now()).inSeconds;
+    _signOutTimer = Timer(
+      Duration(seconds: tempoSingOut ?? 0),
+      signOut,
+    );
   }
 }
