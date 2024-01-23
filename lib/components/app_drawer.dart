@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:loja_flutter/models/autenticacao.dart';
 import 'package:loja_flutter/utils/rotas.dart';
+import 'package:provider/provider.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -40,6 +42,20 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pushReplacementNamed(
                 Rotas.produtos,
+              );
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.exit_to_app),
+            title: const Text('Sair'),
+            onTap: () {
+              Provider.of<Autenticacao>(
+                context,
+                listen: false,
+              ).signOut();
+              Navigator.of(context).pushReplacementNamed(
+                Rotas.authOuHome,
               );
             },
           ),

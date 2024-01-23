@@ -63,4 +63,12 @@ class Autenticacao with ChangeNotifier {
   Future<void> signIn(String email, String senha) async {
     return _autenticar(email, senha, 'signInWithPassword');
   }
+
+  void signOut() {
+    _token = null;
+    _email = null;
+    _idUsuario = null;
+    _dataExpiracao = null;
+    notifyListeners();
+  }
 }
