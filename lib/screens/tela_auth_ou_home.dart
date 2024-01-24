@@ -11,8 +11,21 @@ class TelaAuthOuHome extends StatelessWidget {
   Widget build(BuildContext context) {
     Autenticacao autenticacao = Provider.of(context);
 
-    return autenticacao.estaAutenticado
-        ? const TelaGridProdutos()
-        : const TelaAutenticacao();
+    return FutureBuilder(
+      future: autenticacao.autoLogin(),
+      builder: (ctx, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.error != null) {
+          return const Center(
+            child: Text("Erro ao carregar dados"),
+          );
+        } else {
+          return autenticacao.estaAutenticado
+              ? const TelaGridProdutos()
+              : const TelaAutenticacao();
+        }
+      },
+    );
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:loja_flutter/configs/api_key.dart';
 import 'package:loja_flutter/constants/url_base_autenticacao.dart';
+import 'package:loja_flutter/data/armazenar.dart';
 import 'package:loja_flutter/errors/autenticacao_excecao.dart';
 
 class Autenticacao with ChangeNotifier {
@@ -54,6 +55,14 @@ class Autenticacao with ChangeNotifier {
           seconds: int.parse(body['expiresIn']),
         ),
       );
+
+      Armazenar.salvaMap('dadosUsuario', {
+        'token': _token,
+        'email': _email,
+        'idUsuario': _idUsuario,
+        'dataExpirar': _dataExpirar!.toIso8601String(),
+      });
+
       _autoSignOut();
       notifyListeners();
     }
@@ -67,13 +76,31 @@ class Autenticacao with ChangeNotifier {
     return _autenticar(email, senha, 'signInWithPassword');
   }
 
+  Future<void> autoLogin() async {
+    if (estaAutenticado) return;
+
+    final dadosUsuario = await Armazenar.lerMap('dadosUsuario');
+    if (dadosUsuario.isEmpty) return;
+
+    final dataExpirar = DateTime.parse(dadosUsuario['dataExpirar']);
+    if (dataExpirar.isBefore(DateTime.now())) return;
+
+    _token = dadosUsuario['token'];
+    _email = dadosUsuario['email'];
+    _idUsuario = dadosUsuario['idUsuario'];
+    _dataExpirar = dataExpirar;
+
+    _autoSignOut();
+    notifyListeners();
+  }
+
   void signOut() {
     _token = null;
     _email = null;
     _idUsuario = null;
     _dataExpirar = null;
     _limparSignOutTimer();
-    notifyListeners();
+    Armazenar.remover('dadosUsuario').then((_) => notifyListeners());
   }
 
   void _limparSignOutTimer() {
