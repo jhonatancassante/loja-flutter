@@ -92,7 +92,7 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao>
     );
 
     _animacaoAltura = Tween(
-      begin: const Size(double.infinity, 310),
+      begin: const Size(double.infinity, 340),
       end: const Size(double.infinity, 500),
     ).animate(
       CurvedAnimation(
@@ -123,7 +123,7 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao>
         animation: _animacaoAltura!,
         builder: (ctx, child) => Container(
           padding: const EdgeInsets.all(16),
-          height: _animacaoAltura?.value.height ?? (_eLogin() ? 310 : 500),
+          height: _animacaoAltura?.value.height ?? (_eLogin() ? 340 : 500),
           width: tamanhoDispositivo.width * 0.75,
           child: child,
         ),
