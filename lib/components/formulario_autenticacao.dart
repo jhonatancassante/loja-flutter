@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loja_flutter/components/mensagem_erro.dart';
 import 'package:loja_flutter/models/autenticacao.dart';
-import 'package:loja_flutter/utils/tamanho_box_login.dart';
 import 'package:loja_flutter/utils/validador.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +13,8 @@ class FormularioAutenticacao extends StatefulWidget {
   State<FormularioAutenticacao> createState() => _FormularioAutenticacaoState();
 }
 
-class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
+class _FormularioAutenticacaoState extends State<FormularioAutenticacao>
+    with SingleTickerProviderStateMixin {
   final _controladorSenha = TextEditingController();
   ModoAutenticacao _modoAutenticacao = ModoAutenticacao.login;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -23,22 +23,22 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
     'email': '',
     'senha': '',
   };
-  double _tamanhoBox = 0;
-  int _tamanhoErro = 0;
+
+  AnimationController? _controlador;
+  Animation<Size>? _animacaoAltura;
 
   bool _eLogin() => _modoAutenticacao == ModoAutenticacao.login;
   bool _eSignup() => _modoAutenticacao == ModoAutenticacao.signup;
 
   void _trocarModo() {
     setState(() {
-      _eLogin()
-          ? _modoAutenticacao = ModoAutenticacao.signup
-          : _modoAutenticacao = ModoAutenticacao.login;
-
-      _tamanhoBox = tamanhoBoxLogin(
-        _tamanhoErro,
-        _eLogin(),
-      );
+      if (_eLogin()) {
+        _modoAutenticacao = ModoAutenticacao.signup;
+        _controlador?.forward();
+      } else {
+        _modoAutenticacao = ModoAutenticacao.login;
+        _controlador?.reverse();
+      }
     });
     _formKey.currentState?.reset();
     _controladorSenha.clear();
@@ -46,15 +46,6 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
 
   Future<void> _enviar() async {
     final estaValido = _formKey.currentState?.validate() ?? false;
-
-    setState(
-      () => _tamanhoBox = tamanhoBoxLogin(
-        _tamanhoErro,
-        _eLogin(),
-      ),
-    );
-
-    _tamanhoErro = 0;
 
     if (!estaValido) return;
 
@@ -87,19 +78,35 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
       );
     }
 
-    // _formKey.currentState?.reset();
-    // _controladorSenha.clear();
-
     setState(() => _estaCarregando = false);
   }
 
   @override
   void initState() {
     super.initState();
-    _tamanhoBox = tamanhoBoxLogin(
-      _tamanhoErro,
-      _eLogin(),
+    _controlador = AnimationController(
+      vsync: this,
+      duration: const Duration(
+        milliseconds: 300,
+      ),
     );
+
+    _animacaoAltura = Tween(
+      begin: const Size(double.infinity, 310),
+      end: const Size(double.infinity, 500),
+    ).animate(
+      CurvedAnimation(
+        parent: _controlador!,
+        curve: Curves.linear,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _controlador?.dispose();
   }
 
   @override
@@ -112,10 +119,14 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        height: _tamanhoBox,
-        width: tamanhoDispositivo.width * 0.75,
+      child: AnimatedBuilder(
+        animation: _animacaoAltura!,
+        builder: (ctx, child) => Container(
+          padding: const EdgeInsets.all(16),
+          height: _animacaoAltura?.value.height ?? (_eLogin() ? 310 : 500),
+          width: tamanhoDispositivo.width * 0.75,
+          child: child,
+        ),
         child: Form(
           key: _formKey,
           child: Column(
@@ -125,11 +136,7 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
                   labelText: "E-mail",
                 ),
                 keyboardType: TextInputType.emailAddress,
-                validator: (email) {
-                  final retorno = Validador.campoEmail(email);
-                  _tamanhoErro += (retorno?.length ?? 0);
-                  return retorno;
-                },
+                validator: (email) => Validador.campoEmail(email),
                 onSaved: (email) => _dadosAutenticacao['email'] = email ?? '',
               ),
               TextFormField(
@@ -138,30 +145,23 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
                 ),
                 obscureText: true,
                 controller: _controladorSenha,
-                validator: (senha) {
-                  final retorno = Validador.campoSenha(
-                    senha,
-                    _eLogin(),
-                  );
-                  _tamanhoErro += (retorno?.length ?? 0);
-                  return retorno;
-                },
+                validator: (senha) => Validador.campoSenha(
+                  senha,
+                  _eLogin(),
+                ),
                 onSaved: (senha) => _dadosAutenticacao['senha'] = senha ?? '',
               ),
               if (_eSignup())
                 TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: "Confirmar senha",
-                    ),
-                    obscureText: true,
-                    validator: (senha) {
-                      final retorno = Validador.campoConfirmaSenha(
-                        senha,
-                        _controladorSenha,
-                      );
-                      _tamanhoErro += (retorno?.length ?? 0);
-                      return retorno;
-                    }),
+                  decoration: const InputDecoration(
+                    labelText: "Confirmar senha",
+                  ),
+                  obscureText: true,
+                  validator: (senha) => Validador.campoConfirmaSenha(
+                    senha,
+                    _controladorSenha,
+                  ),
+                ),
               const SizedBox(height: 20),
               _estaCarregando
                   ? const CircularProgressIndicator()
