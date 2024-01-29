@@ -87,9 +87,6 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
       );
     }
 
-    // _formKey.currentState?.reset();
-    // _controladorSenha.clear();
-
     setState(() => _estaCarregando = false);
   }
 
@@ -112,7 +109,9 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeIn,
         padding: const EdgeInsets.all(16),
         height: _tamanhoBox,
         width: tamanhoDispositivo.width * 0.75,
