@@ -109,82 +109,85 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
+      child: AnimatedSize(
+        duration: const Duration(milliseconds: 200),
+        alignment: Alignment.topCenter,
         curve: Curves.easeIn,
-        padding: const EdgeInsets.all(16),
-        height: _tamanhoBox,
-        width: tamanhoDispositivo.width * 0.75,
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: "E-mail",
-                ),
-                keyboardType: TextInputType.emailAddress,
-                validator: (email) {
-                  final retorno = Validador.campoEmail(email);
-                  _tamanhoErro += (retorno?.length ?? 0);
-                  return retorno;
-                },
-                onSaved: (email) => _dadosAutenticacao['email'] = email ?? '',
-              ),
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: "Senha",
-                ),
-                obscureText: true,
-                controller: _controladorSenha,
-                validator: (senha) {
-                  final retorno = Validador.campoSenha(
-                    senha,
-                    _eLogin(),
-                  );
-                  _tamanhoErro += (retorno?.length ?? 0);
-                  return retorno;
-                },
-                onSaved: (senha) => _dadosAutenticacao['senha'] = senha ?? '',
-              ),
-              if (_eSignup())
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          height: _tamanhoBox,
+          width: tamanhoDispositivo.width * 0.75,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
                 TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: "Confirmar senha",
-                    ),
-                    obscureText: true,
-                    validator: (senha) {
-                      final retorno = Validador.campoConfirmaSenha(
-                        senha,
-                        _controladorSenha,
-                      );
-                      _tamanhoErro += (retorno?.length ?? 0);
-                      return retorno;
-                    }),
-              const SizedBox(height: 20),
-              _estaCarregando
-                  ? const CircularProgressIndicator()
-                  : ElevatedButton(
-                      onPressed: _enviar,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: temaBotao?.background,
-                        foregroundColor: temaBotao?.surface,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 30,
-                          vertical: 8,
+                  decoration: const InputDecoration(
+                    labelText: "E-mail",
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (email) {
+                    final retorno = Validador.campoEmail(email);
+                    _tamanhoErro += (retorno?.length ?? 0);
+                    return retorno;
+                  },
+                  onSaved: (email) => _dadosAutenticacao['email'] = email ?? '',
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: "Senha",
+                  ),
+                  obscureText: true,
+                  controller: _controladorSenha,
+                  validator: (senha) {
+                    final retorno = Validador.campoSenha(
+                      senha,
+                      _eLogin(),
+                    );
+                    _tamanhoErro += (retorno?.length ?? 0);
+                    return retorno;
+                  },
+                  onSaved: (senha) => _dadosAutenticacao['senha'] = senha ?? '',
+                ),
+                if (_eSignup())
+                  TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: "Confirmar senha",
+                      ),
+                      obscureText: true,
+                      validator: (senha) {
+                        final retorno = Validador.campoConfirmaSenha(
+                          senha,
+                          _controladorSenha,
+                        );
+                        _tamanhoErro += (retorno?.length ?? 0);
+                        return retorno;
+                      }),
+                const SizedBox(height: 20),
+                _estaCarregando
+                    ? const CircularProgressIndicator()
+                    : ElevatedButton(
+                        onPressed: _enviar,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: temaBotao?.background,
+                          foregroundColor: temaBotao?.surface,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 30,
+                            vertical: 8,
+                          ),
+                        ),
+                        child: Text(
+                          _eLogin() ? 'ENTRAR' : 'REGISTRAR',
                         ),
                       ),
-                      child: Text(
-                        _eLogin() ? 'ENTRAR' : 'REGISTRAR',
-                      ),
-                    ),
-              const Spacer(),
-              TextButton(
-                onPressed: _trocarModo,
-                child:
-                    Text(_eLogin() ? 'Deseja registrar?' : 'Já possui conta?'),
-              ),
-            ],
+                const Spacer(),
+                TextButton(
+                  onPressed: _trocarModo,
+                  child: Text(
+                      _eLogin() ? 'Deseja registrar?' : 'Já possui conta?'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
