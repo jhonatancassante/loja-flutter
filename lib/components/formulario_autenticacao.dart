@@ -24,9 +24,6 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao>
     'senha': '',
   };
 
-  AnimationController? _controlador;
-  Animation<Size>? _animacaoAltura;
-
   bool _eLogin() => _modoAutenticacao == ModoAutenticacao.login;
   bool _eSignup() => _modoAutenticacao == ModoAutenticacao.signup;
 
@@ -34,10 +31,8 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao>
     setState(() {
       if (_eLogin()) {
         _modoAutenticacao = ModoAutenticacao.signup;
-        _controlador?.forward();
       } else {
         _modoAutenticacao = ModoAutenticacao.login;
-        _controlador?.reverse();
       }
     });
     _formKey.currentState?.reset();
@@ -82,34 +77,6 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao>
   }
 
   @override
-  void initState() {
-    super.initState();
-    _controlador = AnimationController(
-      vsync: this,
-      duration: const Duration(
-        milliseconds: 300,
-      ),
-    );
-
-    _animacaoAltura = Tween(
-      begin: const Size(double.infinity, 340),
-      end: const Size(double.infinity, 500),
-    ).animate(
-      CurvedAnimation(
-        parent: _controlador!,
-        curve: Curves.linear,
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    _controlador?.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final tamanhoDispositivo = MediaQuery.of(context).size;
     final temaBotao = Theme.of(context).buttonTheme.colorScheme;
@@ -119,14 +86,12 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao>
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: AnimatedBuilder(
-        animation: _animacaoAltura!,
-        builder: (ctx, child) => Container(
-          padding: const EdgeInsets.all(16),
-          height: _animacaoAltura?.value.height ?? (_eLogin() ? 340 : 500),
-          width: tamanhoDispositivo.width * 0.75,
-          child: child,
-        ),
+      child: AnimatedContainer(
+        padding: const EdgeInsets.all(16),
+        height: _eLogin() ? 340 : 500,
+        width: tamanhoDispositivo.width * 0.75,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeIn,
         child: Form(
           key: _formKey,
           child: Column(
