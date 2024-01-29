@@ -14,7 +14,8 @@ class FormularioAutenticacao extends StatefulWidget {
   State<FormularioAutenticacao> createState() => _FormularioAutenticacaoState();
 }
 
-class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
+class _FormularioAutenticacaoState extends State<FormularioAutenticacao>
+    with SingleTickerProviderStateMixin {
   final _controladorSenha = TextEditingController();
   ModoAutenticacao _modoAutenticacao = ModoAutenticacao.login;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -27,32 +28,10 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
   int _tamanhoErro = 0;
 
   AnimationController? _controladorAnimacao;
+  Animation<double>? _animacaoOpacidade;
 
   bool _eLogin() => _modoAutenticacao == ModoAutenticacao.login;
   bool _eSignup() => _modoAutenticacao == ModoAutenticacao.signup;
-
-  @override
-  void initState() {
-    super.initState();
-    _tamanhoBox = tamanhoBoxLogin(
-      _tamanhoErro,
-      _eLogin(),
-    );
-
-    _controladorAnimacao = AnimationController(
-      vsync: this,
-      duration: const Duration(
-        milliseconds: 300,
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    _controladorAnimacao?.dispose();
-  }
 
   void _trocarModo() {
     setState(() {
@@ -120,6 +99,39 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _controladorAnimacao = AnimationController(
+      vsync: this,
+      duration: const Duration(
+        milliseconds: 300,
+      ),
+    );
+
+    _animacaoOpacidade = Tween(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(
+      CurvedAnimation(
+        parent: _controladorAnimacao!,
+        curve: Curves.linear,
+      ),
+    );
+
+    _tamanhoBox = tamanhoBoxLogin(
+      _tamanhoErro,
+      _eLogin(),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _controladorAnimacao?.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final tamanhoDispositivo = MediaQuery.of(context).size;
     final temaBotao = Theme.of(context).buttonTheme.colorScheme;
@@ -169,20 +181,30 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
                   },
                   onSaved: (senha) => _dadosAutenticacao['senha'] = senha ?? '',
                 ),
-                if (_eSignup())
-                  TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: "Confirmar senha",
-                      ),
-                      obscureText: true,
-                      validator: (senha) {
-                        final retorno = Validador.campoConfirmaSenha(
-                          senha,
-                          _controladorSenha,
-                        );
-                        _tamanhoErro += (retorno?.length ?? 0);
-                        return retorno;
-                      }),
+                AnimatedContainer(
+                  constraints: BoxConstraints(
+                    minHeight: _eLogin() ? 0 : 60,
+                    maxHeight: _eLogin() ? 0 : 120,
+                  ),
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.linear,
+                  child: FadeTransition(
+                    opacity: _animacaoOpacidade!,
+                    child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: "Confirmar senha",
+                        ),
+                        obscureText: true,
+                        validator: (senha) {
+                          final retorno = Validador.campoConfirmaSenha(
+                            senha,
+                            _controladorSenha,
+                          );
+                          _tamanhoErro += (retorno?.length ?? 0);
+                          return retorno;
+                        }),
+                  ),
+                ),
                 const SizedBox(height: 20),
                 _estaCarregando
                     ? const CircularProgressIndicator()
