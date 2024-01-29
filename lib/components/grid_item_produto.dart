@@ -83,9 +83,15 @@ class GridItemProduto extends StatelessWidget {
             Rotas.detalheProduto,
             arguments: produto,
           ),
-          child: Image.network(
-            produto.imagemUrl,
-            fit: BoxFit.cover,
+          child: Hero(
+            tag: produto.id,
+            child: FadeInImage(
+              placeholder: const AssetImage(
+                'assets/images/product-placeholder.png',
+              ),
+              image: NetworkImage(produto.imagemUrl),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),

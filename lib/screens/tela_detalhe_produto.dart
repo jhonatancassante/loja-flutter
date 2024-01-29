@@ -20,9 +20,12 @@ class TelaDetalheProduto extends StatelessWidget {
               height: 300,
               width: double.infinity,
               margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-              child: Image.network(
-                produto.imagemUrl,
-                fit: BoxFit.cover,
+              child: Hero(
+                tag: produto.id,
+                child: Image.network(
+                  produto.imagemUrl,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Text(
