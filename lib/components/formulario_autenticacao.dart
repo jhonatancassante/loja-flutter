@@ -26,14 +26,43 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
   double _tamanhoBox = 0;
   int _tamanhoErro = 0;
 
+  AnimationController? _controladorAnimacao;
+
   bool _eLogin() => _modoAutenticacao == ModoAutenticacao.login;
   bool _eSignup() => _modoAutenticacao == ModoAutenticacao.signup;
 
+  @override
+  void initState() {
+    super.initState();
+    _tamanhoBox = tamanhoBoxLogin(
+      _tamanhoErro,
+      _eLogin(),
+    );
+
+    _controladorAnimacao = AnimationController(
+      vsync: this,
+      duration: const Duration(
+        milliseconds: 300,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _controladorAnimacao?.dispose();
+  }
+
   void _trocarModo() {
     setState(() {
-      _eLogin()
-          ? _modoAutenticacao = ModoAutenticacao.signup
-          : _modoAutenticacao = ModoAutenticacao.login;
+      if (_eLogin()) {
+        _modoAutenticacao = ModoAutenticacao.signup;
+        _controladorAnimacao?.forward();
+      } else {
+        _modoAutenticacao = ModoAutenticacao.login;
+        _controladorAnimacao?.reverse();
+      }
 
       _tamanhoBox = tamanhoBoxLogin(
         _tamanhoErro,
@@ -91,15 +120,6 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _tamanhoBox = tamanhoBoxLogin(
-      _tamanhoErro,
-      _eLogin(),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     final tamanhoDispositivo = MediaQuery.of(context).size;
     final temaBotao = Theme.of(context).buttonTheme.colorScheme;
@@ -110,7 +130,7 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: AnimatedSize(
-        duration: const Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 300),
         alignment: Alignment.topCenter,
         curve: Curves.easeIn,
         child: Container(
