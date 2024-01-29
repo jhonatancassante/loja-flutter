@@ -181,28 +181,39 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao>
                   },
                   onSaved: (senha) => _dadosAutenticacao['senha'] = senha ?? '',
                 ),
-                AnimatedContainer(
+                Container(
                   constraints: BoxConstraints(
                     minHeight: _eLogin() ? 0 : 60,
                     maxHeight: _eLogin() ? 0 : 120,
                   ),
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.linear,
                   child: FadeTransition(
                     opacity: _animacaoOpacidade!,
-                    child: TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: "Confirmar senha",
-                        ),
-                        obscureText: true,
-                        validator: (senha) {
-                          final retorno = Validador.campoConfirmaSenha(
-                            senha,
-                            _controladorSenha,
-                          );
-                          _tamanhoErro += (retorno?.length ?? 0);
-                          return retorno;
-                        }),
+                    child: AnimatedSlide(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeIn,
+                      offset: _eLogin()
+                          ? const Offset(
+                              0,
+                              -1.5,
+                            )
+                          : const Offset(
+                              0,
+                              0,
+                            ),
+                      child: TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: "Confirmar senha",
+                          ),
+                          obscureText: true,
+                          validator: (senha) {
+                            final retorno = Validador.campoConfirmaSenha(
+                              senha,
+                              _controladorSenha,
+                            );
+                            _tamanhoErro += (retorno?.length ?? 0);
+                            return retorno;
+                          }),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
