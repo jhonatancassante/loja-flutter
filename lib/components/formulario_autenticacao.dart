@@ -206,6 +206,7 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao>
                           ),
                           obscureText: true,
                           validator: (senha) {
+                            if (_eLogin()) return null;
                             final retorno = Validador.campoConfirmaSenha(
                               senha,
                               _controladorSenha,
