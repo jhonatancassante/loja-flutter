@@ -1,0 +1,127 @@
+{
+  "favoritos": {
+    "yBI72MQG5WcwTTtVGh1TOGbrSDL2": {
+      "-N_emDQYCBec_vW29ONm": false,
+      "-N_emZaV3c1haI9iEyxx": true,
+      "-N_emjOJLRSR0aD6iuNc": true,
+      "-N_emwVjNz_WSaaeWbed": true,
+      "-NoSQxD7TSfwtTvTXHdW": true
+    }
+  },
+  "pedidos": {
+    "yBI72MQG5WcwTTtVGh1TOGbrSDL2": {
+      "-NoZQgJrWpTmpgYweQGY": {
+        "data": "2024-01-20T01:14:19.137971",
+        "produtos": [
+          {
+            "id": "0.6705567073269695",
+            "idProduto": "-NoSQxD7TSfwtTvTXHdW",
+            "nomeProduto": "PlayStation 5",
+            "preco": 4264,
+            "quantidade": 1
+          },
+          {
+            "id": "0.4835214228311546",
+            "idProduto": "-N_emjOJLRSR0aD6iuNc",
+            "nomeProduto": "Switch OLED - Branco",
+            "preco": 2299.9,
+            "quantidade": 1
+          },
+          {
+            "id": "0.48558770679013263",
+            "idProduto": "-N_emwVjNz_WSaaeWbed",
+            "nomeProduto": "Switch Oled - The Legend of Zelda: Tears of the Kingdom Edition",
+            "preco": 2748.9,
+            "quantidade": 1
+          }
+        ],
+        "total": 9312.8
+      },
+      "-NosoCqWmiGRJUpvUd97": {
+        "data": "2024-01-24T00:13:48.908014",
+        "produtos": [
+          {
+            "id": "0.3790818741439549",
+            "idProduto": "-NnurLmVLn8VRlfQvP7n",
+            "nomeProduto": "Bola Futebol Society Nike CBF Strike Brasileirão 2023 Branco Azul Verde",
+            "preco": 298.9,
+            "quantidade": 4
+          },
+          {
+            "id": "0.4017465738915984",
+            "idProduto": "-N_en6j9wDWLU9-Bs9f7",
+            "nomeProduto": "Nintendo Switch - Azul Neon e Vermelho Neon",
+            "preco": 1999,
+            "quantidade": 4
+          },
+          {
+            "id": "0.540639686384949",
+            "idProduto": "-NoSQxD7TSfwtTvTXHdW",
+            "nomeProduto": "PlayStation 5",
+            "preco": 4264,
+            "quantidade": 5
+          },
+          {
+            "id": "0.8341974304570396",
+            "idProduto": "-N_emjOJLRSR0aD6iuNc",
+            "nomeProduto": "Switch OLED - Branco",
+            "preco": 2299.9,
+            "quantidade": 5
+          },
+          {
+            "id": "0.5568960677365121",
+            "idProduto": "-N_emwVjNz_WSaaeWbed",
+            "nomeProduto": "Switch Oled - The Legend of Zelda: Tears of the Kingdom Edition",
+            "preco": 2748.9,
+            "quantidade": 6
+          }
+        ],
+        "total": 58504.5
+      }
+    }
+  },
+  "produtos": {
+    "-N_emDQYCBec_vW29ONm": {
+      "descricao": "Uso exclusivo para jogos digitais; o console não reproduz discos físicos",
+      "imagemUrl": "https://m.media-amazon.com/images/I/81Z1xBs6GoL._AC_SX679_.jpg",
+      "nome": "Xbox Series S",
+      "preco": 2075
+    },
+    "-N_emZaV3c1haI9iEyxx": {
+      "descricao": "Console Xbox mais rápido e poderoso de todos os tempos",
+      "imagemUrl": "https://m.media-amazon.com/images/I/51A41nLe5IL._AC_SX679_.jpg",
+      "nome": "Xbox Series X",
+      "preco": 4349
+    },
+    "-N_emjOJLRSR0aD6iuNc": {
+      "descricao": "Console Nintendo Switch modelo OLED: Joy-Cons e Dock na cor branca;",
+      "imagemUrl": "https://m.media-amazon.com/images/I/61E4b5drxzS._AC_SX679_.jpg",
+      "nome": "Switch OLED - Branco",
+      "preco": 2299.9
+    },
+    "-N_emwVjNz_WSaaeWbed": {
+      "descricao": "Tela OLED de 7 polegadas - desfrute de cores vivas e contraste nítido com uma tela que acentua as cores",
+      "imagemUrl": "https://m.media-amazon.com/images/I/71odikPqMSL._AC_SX679_.jpg",
+      "nome": "Switch Oled - The Legend of Zelda: Tears of the Kingdom Edition",
+      "preco": 2748.9
+    },
+    "-N_en6j9wDWLU9-Bs9f7": {
+      "descricao": "JOGUE COMO PREFERIR. O Nintendo Switch foi desenvolvido para fazer parte da sua vida, transformando-se de um console doméstico em um console portátil num piscar de olhos",
+      "imagemUrl": "https://m.media-amazon.com/images/I/51ZjnGIOXDL._AC_SX679_.jpg",
+      "nome": "Nintendo Switch - Azul Neon e Vermelho Neon",
+      "preco": 1999
+    },
+    "-NnurLmVLn8VRlfQvP7n": {
+      "descricao": "A Bola de Futebol Society Nike CBF está pronta para voar para o fundo da rede. Um revestimento texturizado com sulcos estabilizadores ajuda a posicionar a bola com precisão.",
+      "imagemUrl": "https://m.media-amazon.com/images/I/61SMzFeLVZL._AC_SL1500_.jpg",
+      "nome": "Bola Futebol Society Nike CBF Strike Brasileirão 2023 Branco Azul Verde",
+      "preco": 298.9
+    },
+    "-NoSQxD7TSfwtTvTXHdW": {
+      "descricao": "Play Has No Limits Jogar Não Tem Limites PlayStation5 O console PS5 oferece novas possibilidades de jogabilidade que você nunca imaginou. Reproduza jogos para PS5 e PS4 em Blu-ray Disc. Além disso, você também pode baixar jogos digitais para PS5 e PS4 pela PlayStation Store. Experimente o carregamento extremamente rápido do SSD de ultra-velocidade, uma imersão mais profunda com suporte à resposta tátil, gatilhos adaptáveis e áudio 3D. Além de uma geração totalmente nova de jogos incríveis PlayStation.",
+      "imagemUrl": "https://m.media-amazon.com/images/I/51rzWirXO4L._AC_SL1000_.jpg",
+      "nome": "PlayStation 5",
+      "preco": 4264
+    }
+  }
+}
