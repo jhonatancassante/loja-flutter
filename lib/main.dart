@@ -7,6 +7,7 @@ import 'package:loja_flutter/screens/tela_carrinho.dart';
 import 'package:loja_flutter/screens/tela_formulario_produto.dart';
 import 'package:loja_flutter/screens/tela_pedidos.dart';
 import 'package:loja_flutter/screens/tela_produtos.dart';
+import 'package:loja_flutter/utils/rota_custom.dart';
 import 'package:provider/provider.dart';
 import 'models/lista_produto.dart';
 import 'screens/tela_detalhe_produto.dart';
@@ -25,6 +26,11 @@ class MyApp extends StatelessWidget {
       fontFamily: 'Lato',
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       useMaterial3: true,
+      pageTransitionsTheme: PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: CustomPageTransitionsBuilder(),
+        },
+      ),
     );
 
     return MultiProvider(

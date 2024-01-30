@@ -31,7 +31,6 @@ class _FormularioAutenticacaoState extends State<FormularioAutenticacao>
   Animation<double>? _animacaoOpacidade;
 
   bool _eLogin() => _modoAutenticacao == ModoAutenticacao.login;
-  bool _eSignup() => _modoAutenticacao == ModoAutenticacao.signup;
 
   void _trocarModo() {
     setState(() {
