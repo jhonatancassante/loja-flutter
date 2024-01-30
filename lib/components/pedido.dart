@@ -20,33 +20,39 @@ class _PedidoWidgetState extends State<PedidoWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        children: [
-          ListTile(
-            title: Text('R\$ ${Formatar.moedaCompacta(widget.pedido.total)}'),
-            subtitle: Text(
-              DateFormat(
-                'dd/MM/yyyy hh:mm',
-              ).format(widget.pedido.data),
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeIn,
+      alignment: Alignment.topCenter,
+      child: Card(
+        child: Column(
+          children: [
+            ListTile(
+              title: Text('R\$ ${Formatar.moedaCompacta(widget.pedido.total)}'),
+              subtitle: Text(
+                DateFormat(
+                  'dd/MM/yyyy hh:mm',
+                ).format(widget.pedido.data),
+              ),
+              trailing: IconButton(
+                icon: const Icon(Icons.expand_more),
+                onPressed: () {
+                  setState(() {
+                    _expandido = !_expandido;
+                  });
+                },
+              ),
             ),
-            trailing: IconButton(
-              icon: const Icon(Icons.expand_more),
-              onPressed: () {
-                setState(() {
-                  _expandido = !_expandido;
-                });
-              },
-            ),
-          ),
-          if (_expandido)
-            Container(
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeIn,
               padding: const EdgeInsets.symmetric(
                 horizontal: 15,
                 vertical: 4,
               ),
-              height: tamanhoLinha(widget.pedido.produtos) + 30.0,
-              // height: (widget.pedido.produtos.length.toDouble()) * 40.0 + 30.0,
+              height: _expandido
+                  ? (tamanhoLinha(widget.pedido.produtos) + 30.0)
+                  : 0,
               child: ListView(
                 children: widget.pedido.produtos.map(
                   (produto) {
@@ -82,7 +88,8 @@ class _PedidoWidgetState extends State<PedidoWidget> {
                 ).toList(),
               ),
             ),
-        ],
+          ],
+        ),
       ),
     );
   }
